@@ -1,6 +1,9 @@
 use sqlx::{Pool, Sqlite};
 
-use super::{board_impl::insert::insert, repository::BoardRepository};
+use super::{
+    board_impl::{get_all::get_all, get_by_id::get_by_id, insert::insert},
+    repository::BoardRepository,
+};
 use crate::internals::model::board::Board;
 
 pub struct BoardRepositoryImpl<'a> {
@@ -19,13 +22,12 @@ impl<'a> BoardRepository for BoardRepositoryImpl<'a> {
     }
 
     async fn get_by_id(&self, id: i64) -> Box<Board> {
-        let mut board = Box::new(Board::default());
-        board.board_id = id;
+        let board = get_by_id(&self.db, id).await.clone();
         board
     }
 
     async fn get_all(&self) -> Vec<Box<Board>> {
-        let board = Box::new(Board::default());
-        vec![board]
+        let boards = get_all(&self.db).await.clone();
+        boards
     }
 }

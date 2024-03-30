@@ -10,7 +10,7 @@ use crate::internals::repository::sqlx::res_data::ResDataRepoImpl;
 
 use internals::repository::sqlx::repository::ResDataRepository;
 use sqlx::migrate::MigrateDatabase;
-use sqlx::{Row, Sqlite, SqlitePool};
+use sqlx::{Sqlite, SqlitePool};
 use tauri::Result;
 
 use dotenv::dotenv;
@@ -45,30 +45,40 @@ async fn main() {
 
     let board_repo = BoardRepositoryImpl::new(&db);
 
-    board_repo.insert(Board { 
-        board_id: 0, 
-        name: "Testing".to_string(), 
-        description: "desc test".to_string(), 
-        created_at: chrono::Local::now(), 
-        updated_at: chrono::Local::now(), 
-        deleted_at: Option::None
-    }).await;
+    board_repo
+        .insert(Board {
+            board_id: 0,
+            name: "Testing".to_string(),
+            description: "desc test".to_string(),
+            created_at: chrono::Local::now(),
+            updated_at: chrono::Local::now(),
+            deleted_at: Option::None,
+        })
+        .await;
 
-    let result = sqlx::query(
-        "SELECT *
-         FROM boards",
-    )
-    .fetch_all(&db)
-    .await
-    .unwrap();
-    for (idx, row) in result.iter().enumerate() {
-        println!("[{}]: {} {:?}", idx, row.get::<i64, &str>("board_id"), row.get::<String, &str>("name"));
+    // let result = sqlx::query(
+    //     "SELECT *
+    //      FROM boards",
+    // )
+    // .fetch_all(&db)
+    // .await
+    // .unwrap();
+    // for (idx, row) in result.iter().enumerate() {
+    //     println!("[{}]: {} {:?}", idx, row.get::<i64, &str>("board_id"), row.get::<String, &str>("name"));
+    // }
+
+    let boards = board_repo.get_all().await;
+    for (idx, board) in boards.iter().enumerate() {
+        println!("[{}]: {} {:?}", idx, board.board_id, board.name);
     }
+
+    let board = board_repo.get_by_id(1).await;
+    println!("{} {:?}", board.board_id, board.name);
 
     // let result = sqlx::query(
     //     "SELECT name
     //      FROM sqlite_schema
-    //      WHERE type ='table' 
+    //      WHERE type ='table'
     //      AND name NOT LIKE 'sqlite_%';",
     // )
     // .fetch_all(&db)
@@ -88,7 +98,6 @@ async fn main() {
     // .await
     // .unwrap();
     // println!("Query result: {:?}", result);
-
 
     // let result =
     //     sqlx::query("INSERT INTO tasks (title, description, board_id, position) VALUES (?, ?, ?, ?)")
