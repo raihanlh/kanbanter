@@ -11,8 +11,8 @@ pub async fn get_highest_board_position(db: &Pool<Sqlite>) -> i32 {
         Err(err) => {
             // Check if the error represents an empty result
             if let sqlx::Error::RowNotFound = err {
-                // If the error represents an empty result, return 1
-                return 1;
+                // If the error represents an empty result, return 0
+                return 0;
             } else {
                 // If it's another error, panic
                 panic!("Error fetching highest board position: {:?}", err);

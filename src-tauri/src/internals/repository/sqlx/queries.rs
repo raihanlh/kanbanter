@@ -6,9 +6,9 @@ pub const GET_BOARD_BY_ID_QUERY: &str =
 pub const GET_ALL_BOARD_QUERY: &str = 
     "SELECT board_id, name, description, created_at, updated_at, position FROM boards WHERE deleted_at IS NULL";
 pub const UPDATE_BOARD_QUERY: &str = 
-    "UPDATE boards SET name = ?, description = ?, created_at = ?, updated_at = ?, position = ? WHERE board_id = ? AND deleted_at IS NULL";
+    "UPDATE boards SET name = ?, description = ?, updated_at = ?, position = ? WHERE board_id = ? AND deleted_at IS NULL";
 pub const GET_HIGHEST_BOARD_POSITION: &str =
-    "SELECT MAX(position) AS max_position FROM boards WHERE deleted_at IS NULL";
+    "SELECT MAX(position) AS max_position FROM boards WHERE deleted_at IS NULL ORDER BY position DESC LIMIT 1";
 
 // Tasks
 pub const INSERT_TASK_QUERY: &str = 

@@ -1,7 +1,7 @@
 use sqlx::{Pool, Sqlite};
 
 use super::{
-    board_impl::{get_all::get_all, get_by_id::get_by_id, insert::insert},
+    board_impl::{get_all::get_all, get_by_id::get_by_id, get_highest_board_position::get_highest_board_position, insert::insert, update::update},
     repository::BoardRepository,
 };
 use crate::internals::model::board::Board;
@@ -18,22 +18,22 @@ impl<'a> BoardRepositoryImpl<'a> {
 
 impl<'a> BoardRepository for BoardRepositoryImpl<'a> {
     async fn insert(&self, board: Board) -> Box<Board> {
-        insert(&self.db, board).await.clone()
+        insert(&self.db, board).await
     }
 
     async fn get_by_id(&self, id: i64) -> Box<Board> {
-        get_by_id(&self.db, id).await.clone()
+        get_by_id(&self.db, id).await
     }
 
     async fn get_all(&self) -> Vec<Box<Board>> {
-        get_all(&self.db).await.clone()
+        get_all(&self.db).await
     }
 
     async fn update(&self, board: Board) -> Box<Board> {
-        insert(&self.db, board).await.clone()
+        update(&self.db, board).await
     }
 
     async fn get_highest_board_position(&self) -> i32 {
-        1
+        get_highest_board_position(&self.db).await
     }
 }
