@@ -22,12 +22,18 @@ impl<'a> BoardRepository for BoardRepositoryImpl<'a> {
     }
 
     async fn get_by_id(&self, id: i64) -> Box<Board> {
-        let board = get_by_id(&self.db, id).await.clone();
-        board
+        get_by_id(&self.db, id).await.clone()
     }
 
     async fn get_all(&self) -> Vec<Box<Board>> {
-        let boards = get_all(&self.db).await.clone();
-        boards
+        get_all(&self.db).await.clone()
+    }
+
+    async fn update(&self, board: Board) -> Box<Board> {
+        insert(&self.db, board).await.clone()
+    }
+
+    async fn get_highest_board_position(&self) -> i32 {
+        1
     }
 }

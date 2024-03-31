@@ -8,6 +8,8 @@ pub trait BoardRepository {
     fn insert(&self, board: Board) -> impl std::future::Future<Output = Box<Board>> + Send;
     fn get_by_id(&self, id: i64) -> impl std::future::Future<Output = Box<Board>> + Send;
     fn get_all(&self) -> impl std::future::Future<Output = Vec<Box<Board>>> + Send;
+    fn update(&self, board: Board) -> impl std::future::Future<Output = Box<Board>> + Send;
+    fn get_highest_board_position(&self) -> impl std::future::Future<Output = i32> + Send;
 }
 
 pub trait TaskRepository {

@@ -11,6 +11,7 @@ pub async fn insert(db: &Pool<Sqlite>, board: Board) -> Box<Board> {
     .bind(&board.description)
     .bind(&board.created_at)
     .bind(&board.updated_at)
+    .bind(&board.position)
     .execute(db)
     .await
     .unwrap();
@@ -19,6 +20,7 @@ pub async fn insert(db: &Pool<Sqlite>, board: Board) -> Box<Board> {
         board_id: result.last_insert_rowid(), 
         name: board.name.clone(), 
         description: board.description.clone(), 
+        position: board.position.clone(),
         created_at: board.created_at, 
         updated_at: board.updated_at, 
         deleted_at: Option::None 

@@ -50,6 +50,7 @@ async fn main() {
             board_id: 0,
             name: "Testing".to_string(),
             description: "desc test".to_string(),
+            position: board_repo.get_highest_board_position().await,
             created_at: chrono::Local::now(),
             updated_at: chrono::Local::now(),
             deleted_at: Option::None,
