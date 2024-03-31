@@ -1,7 +1,7 @@
 // use chrono::{DateTime, FixedOffset, Local, TimeZone};
 use sqlx::{Pool, Sqlite};
 
-use crate::internals::{model::board::Board, repository::sqlx::queries::INSERT_BOARD_QUERY};
+use crate::internals::{model::board::Board, repository::sqlite::queries::INSERT_BOARD_QUERY};
 
 pub async fn insert(db: &Pool<Sqlite>, board: Board) -> Box<Board> {
     let result = sqlx::query(

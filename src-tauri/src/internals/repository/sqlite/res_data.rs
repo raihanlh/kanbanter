@@ -2,7 +2,6 @@ use crate::internals::model::res_data::ResData;
 
 use super::repository::ResDataRepository;
 
-// Implement the MyTrait trait for a struct or type
 pub struct ResDataRepoImpl;
 
 impl ResDataRepoImpl {

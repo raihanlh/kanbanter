@@ -4,11 +4,11 @@ pub mod internals;
 
 use crate::internals::model::board::Board;
 use crate::internals::model::res_data::ResData;
-use crate::internals::repository::sqlx::board::BoardRepositoryImpl;
-use crate::internals::repository::sqlx::repository::BoardRepository;
-use crate::internals::repository::sqlx::res_data::ResDataRepoImpl;
+use crate::internals::repository::sqlite::board::BoardRepositoryImpl;
+use crate::internals::repository::sqlite::repository::BoardRepository;
+use crate::internals::repository::sqlite::res_data::ResDataRepoImpl;
 
-use internals::repository::sqlx::repository::ResDataRepository;
+use internals::repository::sqlite::repository::ResDataRepository;
 use sqlx::migrate::MigrateDatabase;
 use sqlx::{Sqlite, SqlitePool};
 use tauri::Result;

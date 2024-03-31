@@ -1,7 +1,7 @@
 // use chrono::{DateTime, FixedOffset, Local, TimeZone};
 use sqlx::{Pool, Sqlite};
 
-use crate::internals::{model::board::Board, repository::sqlx::queries::UPDATE_BOARD_QUERY};
+use crate::internals::{model::board::Board, repository::sqlite::queries::UPDATE_BOARD_QUERY};
 
 use super::get_by_id::get_by_id;
 

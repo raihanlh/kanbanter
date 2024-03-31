@@ -1,6 +1,6 @@
 use sqlx::{Pool, Row, Sqlite};
 
-use crate::internals::repository::sqlx::queries::GET_HIGHEST_BOARD_POSITION;
+use crate::internals::repository::sqlite::queries::GET_HIGHEST_BOARD_POSITION;
 
 pub async fn get_highest_board_position(db: &Pool<Sqlite>) -> i32 {
     let result = match sqlx::query(GET_HIGHEST_BOARD_POSITION)
