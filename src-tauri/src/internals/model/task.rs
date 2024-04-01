@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Task {
-    pub id: i64,
+    pub task_id: i64,
     pub title: String,
     pub description: String,
     pub board_id: i64,

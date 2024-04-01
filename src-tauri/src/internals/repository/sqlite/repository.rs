@@ -13,7 +13,7 @@ pub trait BoardRepository {
 }
 
 pub trait TaskRepository {
-    fn insert(&self, task: Task) -> impl std::future::Future<Output = Task> + Send;
-    fn get_by_id(&self, id: i64) -> impl std::future::Future<Output = Task> + Send;
-    fn get_all(&self) -> impl std::future::Future<Output = Vec<Task>> + Send;
+    fn insert(&self, task: Task) -> impl std::future::Future<Output = Box<Task>> + Send;
+    // fn get_by_id(&self, id: i64) -> impl std::future::Future<Output = Task> + Send;
+    // fn get_all(&self) -> impl std::future::Future<Output = Vec<Task>> + Send;
 }
