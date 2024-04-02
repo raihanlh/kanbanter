@@ -20,4 +20,4 @@ pub const GET_ALL_TASK_QUERY: &str =
 pub const UPDATE_TASK_QUERY: &str = 
     "UPDATE tasks SET title = ?, description = ?, board_id = ?, position = ?, created_at = ?, updated_at = ? WHERE task_id = ? and  deleted_at IS NULL";
 pub const GET_HIGHEST_TASK_POSITION: &str =
-    "SELECT MAX(position) AS max_position FROM tasks WHERE task_id = ? WHERE deleted_at IS NULL";
+    "SELECT MAX(position) AS max_position FROM tasks WHERE board_id = ? WHERE deleted_at IS NULL ORDER BY position DESC LIMIT 1";
