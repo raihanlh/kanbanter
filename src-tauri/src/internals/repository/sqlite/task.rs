@@ -2,7 +2,7 @@ use sqlx::{Pool, Sqlite};
 
 use crate::internals::model::task::Task;
 
-use super::{repository::TaskRepository, task_impl::{get_all::get_all, get_by_id::get_by_id, get_highest_task_position::get_highest_task_position, insert::insert}};
+use super::{repository::TaskRepository, task_impl::{get_all::get_all, get_by_id::get_by_id, get_highest_task_position::get_highest_task_position, insert::insert, update::update}};
 
 pub struct TaskRepositoryImpl<'a> {
     db: &'a Pool<Sqlite>,
@@ -31,5 +31,7 @@ impl<'a> TaskRepository for TaskRepositoryImpl<'a> {
         get_highest_task_position(&self.db, board_id).await
     }
 
-
+    async fn update(&self, task: Task) -> Box<Task> {
+        update(&self.db, task).await
+    }
 }

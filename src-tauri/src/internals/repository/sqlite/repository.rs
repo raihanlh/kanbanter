@@ -17,4 +17,5 @@ pub trait TaskRepository {
     fn get_by_id(&self, id: i64) -> impl std::future::Future<Output = Box<Task>> + Send;
     fn get_all(&self) -> impl std::future::Future<Output = Vec<Box<Task>>> + Send;
     fn get_highest_task_position(&self, board_id: i64) -> impl std::future::Future<Output = i32> + Send;
+    fn update(&self, task: Task) -> impl std::future::Future<Output = Box<Task>> + Send;
 }
