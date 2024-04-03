@@ -1,7 +1,7 @@
 use sqlx::{Pool, Sqlite};
 
 use super::{
-    board_impl::{get_all::get_all, get_by_id::get_by_id, get_highest_board_position::get_highest_board_position, insert::insert, update::update},
+    board_impl::{delete::delete, get_all::get_all, get_by_id::get_by_id, get_highest_board_position::get_highest_board_position, insert::insert, update::update},
     repository::BoardRepository,
 };
 use crate::internals::model::board::Board;
@@ -35,5 +35,9 @@ impl<'a> BoardRepository for BoardRepositoryImpl<'a> {
 
     async fn get_highest_board_position(&self) -> i32 {
         get_highest_board_position(&self.db).await
+    }
+
+    async fn delete(&self, id: i64) -> bool {
+        delete(&self.db, id).await
     }
 }

@@ -10,6 +10,7 @@ pub trait BoardRepository {
     fn get_all(&self) -> impl std::future::Future<Output = Vec<Box<Board>>> + Send;
     fn update(&self, board: Board) -> impl std::future::Future<Output = Box<Board>> + Send;
     fn get_highest_board_position(&self) -> impl std::future::Future<Output = i32> + Send;
+    fn delete(&self, id: i64) -> impl std::future::Future<Output = bool> + Send;
 }
 
 pub trait TaskRepository {
