@@ -43,7 +43,7 @@ async fn main() {
         }
     }
 
-    let board_repo = BoardRepositoryImpl::new(&db);
+    let board_repo = BoardRepositoryImpl::new(db.clone());
 
     let new_board = board_repo
         .insert(Board {

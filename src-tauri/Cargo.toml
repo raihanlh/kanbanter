@@ -23,6 +23,7 @@ dotenv = "0.15.0"
 tokio = { version = "1.20.0", features = ["macros"] }
 time = { version = "0.3", features = ["macros"] }
 chrono = { version = "0.4.24", features = ["serde"] }
+async-trait = "0.1.79"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

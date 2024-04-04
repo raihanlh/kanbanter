@@ -1,20 +1,23 @@
+use async_trait::async_trait;
 use sqlx::{Pool, Sqlite};
 
 use crate::internals::model::task::Task;
 
 use super::{repository::TaskRepository, task_impl::{delete::delete, get_all::get_all, get_by_id::get_by_id, get_highest_task_position::get_highest_task_position, insert::insert, update::update}};
 
-pub struct TaskRepositoryImpl<'a> {
-    db: &'a Pool<Sqlite>,
+#[derive(Clone)]
+pub struct TaskRepositoryImpl {
+    db: Pool<Sqlite>,
 }
 
-impl<'a> TaskRepositoryImpl<'a> {
-    pub fn new(db: &'a Pool<Sqlite>) -> Self {
+impl TaskRepositoryImpl {
+    pub fn new(db: Pool<Sqlite>) -> Self {
         TaskRepositoryImpl { db }
     }
 }
 
-impl<'a> TaskRepository for TaskRepositoryImpl<'a> {
+#[async_trait]
+impl TaskRepository for TaskRepositoryImpl {
     async fn insert(&self, task: Task) -> Box<Task> {
         insert(&self.db, task).await
     }

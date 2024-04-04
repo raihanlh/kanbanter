@@ -3,7 +3,7 @@ use sqlx::{Pool, Sqlite};
 
 use crate::internals::{model::board::Board, repository::sqlite::queries::INSERT_BOARD_QUERY};
 
-pub async fn insert(db: &Pool<Sqlite>, board: Board) -> Box<Board> {
+pub async fn insert(db: Pool<Sqlite>, board: Board) -> Box<Board> {
     let result = sqlx::query(
         INSERT_BOARD_QUERY,
     )
@@ -12,7 +12,7 @@ pub async fn insert(db: &Pool<Sqlite>, board: Board) -> Box<Board> {
     .bind(&board.created_at)
     .bind(&board.updated_at)
     .bind(&board.position)
-    .execute(db)
+    .execute(&db)
     .await
     .unwrap();
 

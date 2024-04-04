@@ -1,3 +1,5 @@
+use async_trait::async_trait;
+
 use crate::internals::model::res_data::ResData;
 
 use super::repository::ResDataRepository;
@@ -10,6 +12,7 @@ impl ResDataRepoImpl {
     }
 }
 
+#[async_trait]
 impl ResDataRepository for ResDataRepoImpl {
     fn get_all_data(&self) -> Vec<ResData> {
         let res = vec![

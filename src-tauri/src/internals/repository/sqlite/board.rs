@@ -1,3 +1,4 @@
+use async_trait::async_trait;
 use sqlx::{Pool, Sqlite};
 
 use super::{
@@ -6,19 +7,21 @@ use super::{
 };
 use crate::internals::model::board::Board;
 
-pub struct BoardRepositoryImpl<'a> {
-    db: &'a Pool<Sqlite>,
+#[derive(Clone)]
+pub struct BoardRepositoryImpl {
+    db: Pool<Sqlite>,
 }
 
-impl<'a> BoardRepositoryImpl<'a> {
-    pub fn new(db: &'a Pool<Sqlite>) -> Self {
+impl BoardRepositoryImpl {
+    pub fn new(db:Pool<Sqlite>) -> Self {
         BoardRepositoryImpl { db }
     }
 }
 
-impl<'a> BoardRepository for BoardRepositoryImpl<'a> {
+#[async_trait]
+impl BoardRepository for BoardRepositoryImpl {
     async fn insert(&self, board: Board) -> Box<Board> {
-        insert(&self.db, board).await
+        insert(self.db.clone(), board).await
     }
 
     async fn get_by_id(&self, id: i64) -> Box<Board> {

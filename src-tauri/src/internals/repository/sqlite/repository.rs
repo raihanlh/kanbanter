@@ -1,23 +1,27 @@
+use async_trait::async_trait;
+
 use crate::internals::model::{board::Board, res_data::ResData, task::Task};
 
 pub trait ResDataRepository {
     fn get_all_data(&self) -> Vec<ResData>;
 }
 
+#[async_trait]
 pub trait BoardRepository {
-    fn insert(&self, board: Board) -> impl std::future::Future<Output = Box<Board>> + Send;
-    fn get_by_id(&self, id: i64) -> impl std::future::Future<Output = Box<Board>> + Send;
-    fn get_all(&self) -> impl std::future::Future<Output = Vec<Box<Board>>> + Send;
-    fn update(&self, board: Board) -> impl std::future::Future<Output = Box<Board>> + Send;
-    fn get_highest_board_position(&self) -> impl std::future::Future<Output = i32> + Send;
-    fn delete(&self, id: i64) -> impl std::future::Future<Output = bool> + Send;
+    async fn insert(&self, board: Board) -> Box<Board>;
+    async fn get_by_id(&self, id: i64) ->  Box<Board>;
+    async fn get_all(&self) ->  Vec<Box<Board>>;
+    async fn update(&self, board: Board) ->  Box<Board>;
+    async fn get_highest_board_position(&self) ->  i32;
+    async fn delete(&self, id: i64) ->  bool;
 }
 
+#[async_trait]
 pub trait TaskRepository {
-    fn insert(&self, task: Task) -> impl std::future::Future<Output = Box<Task>> + Send;
-    fn get_by_id(&self, id: i64) -> impl std::future::Future<Output = Box<Task>> + Send;
-    fn get_all(&self) -> impl std::future::Future<Output = Vec<Box<Task>>> + Send;
-    fn get_highest_task_position(&self, board_id: i64) -> impl std::future::Future<Output = i32> + Send;
-    fn update(&self, task: Task) -> impl std::future::Future<Output = Box<Task>> + Send;
-    fn delete(&self, id: i64) -> impl std::future::Future<Output = bool> + Send;
+    async fn insert(&self, task: Task) ->  Box<Task>;
+    async fn get_by_id(&self, id: i64) ->  Box<Task>;
+    async fn get_all(&self) ->  Vec<Box<Task>>;
+    async fn get_highest_task_position(&self, board_id: i64) ->  i32;
+    async fn update(&self, task: Task) ->  Box<Task>;
+    async fn delete(&self, id: i64) ->  bool;
 }
