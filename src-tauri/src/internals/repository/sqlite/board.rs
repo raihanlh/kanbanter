@@ -1,8 +1,13 @@
+use std::sync::Arc;
+
 use async_trait::async_trait;
 use sqlx::{Pool, Sqlite};
 
 use super::{
-    board_impl::{delete::delete, get_all::get_all, get_by_id::get_by_id, get_highest_board_position::get_highest_board_position, insert::insert, update::update},
+    board_impl::{
+        delete::delete, get_all::get_all, get_by_id::get_by_id,
+        get_highest_board_position::get_highest_board_position, insert::insert, update::update,
+    },
     repository::BoardRepository,
 };
 use crate::internals::model::board::Board;
@@ -13,10 +18,16 @@ pub struct BoardRepositoryImpl {
 }
 
 impl BoardRepositoryImpl {
-    pub fn new(db:Pool<Sqlite>) -> Self {
-        BoardRepositoryImpl { db }
+    pub async fn new(db: Pool<Sqlite>) -> Arc<Box<dyn BoardRepository + Send + Sync>> {
+        Arc::new(Box::new(BoardRepositoryImpl { db }))
     }
 }
+
+// impl BoardRepositoryImpl {
+//     pub fn new(db: Pool<Sqlite>) -> Self {
+//         BoardRepositoryImpl { db }
+//     }
+// }
 
 #[async_trait]
 impl BoardRepository for BoardRepositoryImpl {
