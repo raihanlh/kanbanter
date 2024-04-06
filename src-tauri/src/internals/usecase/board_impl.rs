@@ -33,7 +33,7 @@ impl BoardUsecase for BoardUsecaseImpl {
         self.repo.update(board).await
     }
 
-    async fn get_highest_board_position(&self, id: i64) ->  i32 {
+    async fn get_highest_board_position(&self) ->  i32 {
         self.repo.get_highest_board_position().await
     }
 

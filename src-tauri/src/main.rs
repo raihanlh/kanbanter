@@ -5,7 +5,7 @@ pub mod internals;
 use crate::internals::model::board::Board;
 use crate::internals::model::res_data::ResData;
 use crate::internals::repository::sqlite::board::BoardRepositoryImpl;
-use crate::internals::repository::sqlite::repository::BoardRepository;
+// use crate::internals::repository::sqlite::repository::BoardRepository;
 use crate::internals::repository::sqlite::res_data::ResDataRepoImpl;
 
 use internals::repository::sqlite::repository::ResDataRepository;

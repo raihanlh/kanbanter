@@ -3,7 +3,7 @@ use std::env;
 use sqlx::SqlitePool;
 use tauri::{command, Result};
 
-use crate::{init_db, internals::{model::board::Board, repository::sqlite::{board::BoardRepositoryImpl, repository::BoardRepository}, usecase::{board::BoardUsecase, board_impl::BoardUsecaseImpl}}};
+use crate::{init_db, internals::{model::board::Board, repository::sqlite::board::BoardRepositoryImpl, usecase::{board::BoardUsecase, board_impl::BoardUsecaseImpl}}};
 
 pub async fn init() {
     tauri::Builder::default()
