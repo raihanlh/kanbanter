@@ -16,6 +16,8 @@ use tauri::Result;
 use dotenv::dotenv;
 use std::env;
 
+use crate::internals::handler::init::init;
+
 #[tokio::main]
 async fn main() {
     dotenv().ok();
@@ -45,26 +47,26 @@ async fn main() {
 
     let board_repo = BoardRepositoryImpl::new(db.clone()).await;
 
-    let new_board = board_repo
-        .insert(Board {
-            board_id: 0,
-            name: "Testing".to_string(),
-            description: "desc test".to_string(),
-            position: board_repo.get_highest_board_position().await + 1,
-            created_at: chrono::Local::now(),
-            updated_at: chrono::Local::now(),
-            deleted_at: Option::None,
-        })
-        .await;
+    // let new_board = board_repo
+    //     .insert(Board {
+    //         board_id: 0,
+    //         name: "Testing".to_string(),
+    //         description: "desc test".to_string(),
+    //         position: board_repo.get_highest_board_position().await + 1,
+    //         created_at: chrono::Local::now(),
+    //         updated_at: chrono::Local::now(),
+    //         deleted_at: Option::None,
+    //     })
+    //     .await;
 
-    let mut board = board_repo.get_by_id(new_board.board_id).await;
-    println!("{:?}", serde_json::to_string(&*board).unwrap());
+    // let mut board = board_repo.get_by_id(new_board.board_id).await;
+    // println!("{:?}", serde_json::to_string(&*board).unwrap());
 
-    board.name = format!("{} (updated)", board.name);
-    board.description = format!("{} (updated)", board.description);
+    // board.name = format!("{} (updated)", board.name);
+    // board.description = format!("{} (updated)", board.description);
 
-    let updated_board = board_repo.update(*board).await;
-    println!("{:?}", serde_json::to_string(&*updated_board).unwrap());
+    // let updated_board = board_repo.update(*board).await;
+    // println!("{:?}", serde_json::to_string(&*updated_board).unwrap());
 
     let boards = board_repo.get_all().await;
     for (_idx, board) in boards.iter().enumerate() {
@@ -73,10 +75,11 @@ async fn main() {
 
     println!("{:?}", board_repo.get_highest_board_position().await);
 
-    tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, get_all_data])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+    // tauri::Builder::default()
+    //     .invoke_handler(tauri::generate_handler![greet, get_all_data])
+    //     .run(tauri::generate_context!())
+    //     .expect("error while running tauri application");
+    init().await;
 }
 
 async fn init_db(db_url: &str) {
@@ -91,11 +94,11 @@ async fn init_db(db_url: &str) {
     }
 }
 
-#[tauri::command]
-fn greet(name: &str) -> String {
-    println!("78fya9s8djiasj");
-    format!("Hello, {}!", name)
-}
+// #[tauri::command]
+// fn greet(name: &str) -> String {
+//     println!("78fya9s8djiasj");
+//     format!("Hello, {}!", name)
+// }
 
 pub trait ResDataHandler {
     fn get_all_data(&self) -> Result<Vec<ResData>>;
@@ -120,11 +123,11 @@ impl ResDataHandler for ResDataHandlerImpl {
     }
 }
 
-#[tauri::command]
-fn get_all_data() -> Result<Vec<ResData>> {
-    let repo = ResDataRepoImpl::new();
-    let handler = ResDataHandlerImpl::new(Box::new(repo));
-    let res = handler.get_all_data();
+// #[tauri::command]
+// fn get_all_data() -> Result<Vec<ResData>> {
+//     let repo = ResDataRepoImpl::new();
+//     let handler = ResDataHandlerImpl::new(Box::new(repo));
+//     let res = handler.get_all_data();
 
-    res
-}
+//     res
+// }

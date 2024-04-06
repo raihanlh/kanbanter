@@ -30,12 +30,12 @@ export default function Greet() {
         <Button
           onClick={(e) => {
             e.preventDefault();
-            invoke<string>('greet2', { name: textValue })
-              .then(result => {
-                setGreeting(result);
-                console.log(result); // Log the updated value of greeting
-              })
-              .catch(console.error)
+            // invoke<string>('greet2', { name: textValue })
+            //   .then(result => {
+            //     setGreeting(result);
+            //     console.log(result); // Log the updated value of greeting
+            //   })
+            //   .catch(console.error)
           }
           }
         >
