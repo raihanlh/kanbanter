@@ -69,15 +69,15 @@ impl Seeder<Board> for BoardSeeder {
                 updated_at: chrono::Local::now(),
                 deleted_at: Option::None,
             },
-            // Board {
-            //     board_id: 0,
-            //     name: "Testing Board 2".to_string(),
-            //     description: "desc test 2".to_string(),
-            //     position: 0,
-            //     created_at: chrono::Local::now(),
-            //     updated_at: chrono::Local::now(),
-            //     deleted_at: Option::None,
-            // },
+            Board {
+                board_id: 0,
+                name: "Testing Board 2".to_string(),
+                description: "desc test 2".to_string(),
+                position: 0,
+                created_at: chrono::Local::now(),
+                updated_at: chrono::Local::now(),
+                deleted_at: Option::None,
+            },
         ];
 
         let mut board_ids_res = vec![];
@@ -173,7 +173,7 @@ impl Seeder<Task> for TaskSeeder {
                             deleted_at: task.deleted_at,
                         })
                         .await;
-                    let task = self.task_repo.get_by_id(res.task_id).await;
+                    let _task = self.task_repo.get_by_id(res.task_id).await;
                     tasks_res.push(res);
                 }
             }

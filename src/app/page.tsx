@@ -1,11 +1,159 @@
-import Image from "next/image";
-import Greet from './greet';
-import Link from "next/link";
+"use client";
+
+import { NextPage } from "next";
+import React, { useEffect, useState } from "react";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DraggableProvided,
+  DraggableStateSnapshot,
+  DroppableProvided,
+  DroppableStateSnapshot,
+  OnDragEndResponder,
+  DropResult,
+} from "@hello-pangea/dnd";
+import { invoke } from "@tauri-apps/api";
+
+const getItems = (count: number) =>
+  Array.from({ length: count }, (v, k) => k).map((k) => ({
+    id: `item-${k}`,
+    content: `item ${k}`,
+  }));
+
+const grid = 8;
+
+const reorder = (list: any[], startIndex: number, endIndex: number): any[] => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
+const getListStyle = (isDraggingOver: boolean) => ({
+  background: isDraggingOver ? "lightblue" : "lightgrey",
+  padding: grid,
+  width: 250,
+});
+
+const getItemStyle = (isDragging: any, draggableStyle: any) => ({
+  // some basic styles to make the items look a bit nicer
+  userSelect: "none",
+  padding: grid * 2,
+  margin: `0 0 ${grid}px 0`,
+
+  // change background colour if dragging
+  background: isDragging ? "lightgreen" : "grey",
+
+  // styles we need to apply on draggables
+  ...draggableStyle,
+});
+
+interface ResData {
+  id: number;
+  content: string;
+}
+
+interface Board {
+  board_id: number;
+  name: string;
+  description: string;
+  position: number;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
+}
 
 export default function Home() {
+  const [items, setItems] = useState<any[]>(getItems(10));
+  const [boards, setBoards] = useState<Board[]>([]);
+  const [res, setRes] = useState<ResData[]>([]);
+
+  useEffect(() => {
+    invoke<ResData[]>("get_all_data", {})
+      .then((result) => {
+        setRes(result);
+        console.log(result); // Log the updated value of greeting
+      })
+      .catch(console.error);
+    invoke<Board[]>("get_all_boards", {})
+      .then((result) => {
+        setBoards(result);
+        console.log(result); // Log the updated value of greeting
+      })
+      .catch(console.error);
+  }, []);
+
+  const onDragEnd: OnDragEndResponder = (result: DropResult) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const newItems = reorder(
+      items,
+      result.source.index,
+      result.destination.index
+    );
+
+    setItems(newItems);
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Greet />
+    <main>
+      <h1>DND PAGE</h1>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="flex flex-row">
+          {boards.map((board) => (
+            <div key={board.board_id} className="mx-2">
+              <h4>{board.name}</h4>
+              <Droppable
+                droppableId={`droppable-${board.board_id}`}
+                key={board.board_id}
+              >
+                {(
+                  provided: DroppableProvided,
+                  snapshot: DroppableStateSnapshot
+                ) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={getListStyle(snapshot.isDraggingOver)}
+                  >
+                    {res.map((item, index) => (
+                      <Draggable
+                        key={`${board.board_id}-${item.id}`}
+                        draggableId={`${board.board_id}-${item.id}`}
+                        index={index}
+                      >
+                        {(
+                          provided: DraggableProvided,
+                          snapshot: DraggableStateSnapshot
+                        ) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getItemStyle(
+                              snapshot.isDragging,
+                              provided.draggableProps.style
+                            )}
+                          >
+                            {item.content}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+          ))}
+        </div>
+      </DragDropContext>
+      {/* <Greet />
       <div>
         <Link
           href={"/dnd"}
@@ -13,7 +161,7 @@ export default function Home() {
         >
           <h3>DND Page</h3>
         </Link>
-      </div>
+      </div> */}
       {/* <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           Get started by editing&nbsp;
