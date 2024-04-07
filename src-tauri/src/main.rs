@@ -8,6 +8,7 @@ use crate::internals::repository::sqlite::board::BoardRepositoryImpl;
 // use crate::internals::repository::sqlite::repository::BoardRepository;
 use crate::internals::repository::sqlite::res_data::ResDataRepoImpl;
 
+use internals::pkg::sqlite::migrate::migrate_db;
 use internals::repository::sqlite::repository::ResDataRepository;
 use sqlx::migrate::MigrateDatabase;
 use sqlx::{Sqlite, SqlitePool};
@@ -24,28 +25,30 @@ async fn main() {
 
     let db_url = env::var("DB_URL").unwrap();
     println!("{}", db_url);
-    init_db(db_url.as_str()).await;
+    // init_db(db_url.as_str()).await;
 
-    let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    // let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
 
-    let crate_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
-    print!("{}", crate_dir);
-    let migrations = std::path::Path::new(&crate_dir).join("./migrations");
+    // let crate_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
+    // print!("{}", crate_dir);
+    // let migrations = std::path::Path::new(&crate_dir).join("./migrations");
 
-    let migration_results = sqlx::migrate::Migrator::new(migrations)
-        .await
-        .unwrap()
-        .run(&db)
-        .await;
+    // let migration_results = sqlx::migrate::Migrator::new(migrations)
+    //     .await
+    //     .unwrap()
+    //     .run(&db)
+    //     .await;
 
-    match migration_results {
-        Ok(_) => println!("Migration success"),
-        Err(error) => {
-            panic!("error: {}", error);
-        }
-    }
+    // match migration_results {
+    //     Ok(_) => println!("Migration success"),
+    //     Err(error) => {
+    //         panic!("error: {}", error);
+    //     }
+    // }
 
-    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    migrate_db(db_url);
+
+    // let board_repo = BoardRepositoryImpl::new(db.clone()).await;
 
     // let new_board = board_repo
     //     .insert(Board {
@@ -68,12 +71,12 @@ async fn main() {
     // let updated_board = board_repo.update(*board).await;
     // println!("{:?}", serde_json::to_string(&*updated_board).unwrap());
 
-    let boards = board_repo.get_all().await;
-    for (_idx, board) in boards.iter().enumerate() {
-        println!("{:?}", serde_json::to_string(&*board).unwrap());
-    }
+    // let boards = board_repo.get_all().await;
+    // for (_idx, board) in boards.iter().enumerate() {
+    //     println!("{:?}", serde_json::to_string(&*board).unwrap());
+    // }
 
-    println!("{:?}", board_repo.get_highest_board_position().await);
+    // println!("{:?}", board_repo.get_highest_board_position().await);
 
     // tauri::Builder::default()
     //     .invoke_handler(tauri::generate_handler![greet, get_all_data])
@@ -82,17 +85,17 @@ async fn main() {
     init().await;
 }
 
-async fn init_db(db_url: &str) {
-    if !Sqlite::database_exists(db_url).await.unwrap_or(false) {
-        println!("Creating database {}", db_url);
-        match Sqlite::create_database(db_url).await {
-            Ok(_) => println!("Create db success"),
-            Err(error) => panic!("error: {}", error),
-        }
-    } else {
-        println!("Database already exists");
-    }
-}
+// async fn init_db(db_url: &str) {
+//     if !Sqlite::database_exists(db_url).await.unwrap_or(false) {
+//         println!("Creating database {}", db_url);
+//         match Sqlite::create_database(db_url).await {
+//             Ok(_) => println!("Create db success"),
+//             Err(error) => panic!("error: {}", error),
+//         }
+//     } else {
+//         println!("Database already exists");
+//     }
+// }
 
 // #[tauri::command]
 // fn greet(name: &str) -> String {
