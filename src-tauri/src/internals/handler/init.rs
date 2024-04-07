@@ -15,7 +15,6 @@ pub async fn init() {
 #[command]
 pub async fn get_all_boards() -> Result<Vec<Box<Board>>> {
     let db_url = env::var("DB_URL").unwrap();
-    println!("{}", db_url);
     init_db(db_url.as_str()).await;
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();

@@ -14,15 +14,15 @@ pub const DELETE_BOARD_BY_BOARD_ID: &str =
 
 // Tasks
 pub const INSERT_TASK_QUERY: &str = 
-    "INSERT INTO tasks (title, description, board_id, position, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(task_id) DO NOTHING";
+    "INSERT INTO tasks (title, description, board_id, created_at, updated_at, position) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(task_id) DO NOTHING";
 pub const GET_TASK_BY_ID_QUERY: &str = 
-    "SELECT task_id, name, description, created_at, updated_at FROM tasks WHERE task_id = ? AND deleted_at IS NULL";
+    "SELECT task_id, board_id, title, description, created_at, updated_at, position FROM tasks WHERE task_id = ? AND deleted_at IS NULL";
 pub const GET_ALL_TASK_QUERY: &str = 
-    "SELECT task_id, name, description, created_at, updated_at FROM tasks AND deleted_at IS NULL";
+    "SELECT task_id, board_id, title, description, created_at, updated_at, position FROM tasks AND deleted_at IS NULL";
 pub const UPDATE_TASK_QUERY: &str = 
     "UPDATE tasks SET title = ?, description = ?, board_id = ?, position = ?, updated_at = ? WHERE task_id = ? and  deleted_at IS NULL";
 pub const GET_HIGHEST_TASK_POSITION: &str =
-    "SELECT MAX(position) AS max_position FROM tasks WHERE board_id = ? WHERE deleted_at IS NULL ORDER BY position DESC LIMIT 1";
+    "SELECT MAX(position) AS max_position FROM tasks WHERE board_id = ? AND deleted_at IS NULL";
 pub const DELETE_TASK_BY_TASK_ID: &str =
     "UPDATE tasks SET deleted_at = CURRENT_TIMESTAMP WHERE task_id = ?";
 pub const DELETE_TASK_BY_BOARD_ID: &str =

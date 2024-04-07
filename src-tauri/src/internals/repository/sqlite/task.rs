@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use async_trait::async_trait;
 use sqlx::{Pool, Sqlite};
 
@@ -11,8 +13,8 @@ pub struct TaskRepositoryImpl {
 }
 
 impl TaskRepositoryImpl {
-    pub fn new(db: Pool<Sqlite>) -> Self {
-        TaskRepositoryImpl { db }
+    pub async fn new(db: Pool<Sqlite>) -> Arc<Box<dyn TaskRepository + Send + Sync>> {
+        Arc::new(Box::new(TaskRepositoryImpl { db }))
     }
 }
 

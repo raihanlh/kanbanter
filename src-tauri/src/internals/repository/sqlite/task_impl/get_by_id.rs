@@ -8,7 +8,7 @@ pub async fn get_by_id(db: &Pool<Sqlite>, id: i64) -> Box<Task> {
         .fetch_one(db)
         .await
         .unwrap();
-
+    
     let task = map_sqlresult_task(&result);
 
     task
