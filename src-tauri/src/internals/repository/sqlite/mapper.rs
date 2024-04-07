@@ -10,6 +10,7 @@ pub fn map_sqlresult_board(row: &SqliteRow) -> Box<Board> {
         description: row.get::<String, &str>("description"),
         position: row.get::<i32, &str>("position"),
         created_at: row.get::<DateTime<Local>, &str>("created_at"),
+        tasks: vec![],
         updated_at: row.get::<DateTime<Local>, &str>("updated_at"),
         deleted_at: Option::None,
     })

@@ -21,6 +21,7 @@ pub async fn insert(db: Pool<Sqlite>, board: Board) -> Box<Board> {
         name: board.name.clone(), 
         description: board.description.clone(), 
         position: board.position.clone(),
+        tasks: vec![],
         created_at: board.created_at, 
         updated_at: board.updated_at, 
         deleted_at: Option::None 

@@ -3,7 +3,7 @@ use std::env;
 use sqlx::SqlitePool;
 use tauri::{command, Result};
 
-use crate::{internals::{model::{board::Board, res_data::ResData}, pkg::sqlite::init::init_db, repository::sqlite::{board::BoardRepositoryImpl, res_data::ResDataRepoImpl}, usecase::{board::BoardUsecase, board_impl::BoardUsecaseImpl}}, ResDataHandler, ResDataHandlerImpl};
+use crate::{internals::{model::{board::Board, res_data::ResData}, pkg::sqlite::init::init_db, repository::sqlite::{board::BoardRepositoryImpl, res_data::ResDataRepoImpl, task::TaskRepositoryImpl}, usecase::{board::BoardUsecase, board_impl::BoardUsecaseImpl}}, ResDataHandler, ResDataHandlerImpl};
 
 pub async fn init() {
     tauri::Builder::default()
@@ -18,8 +18,9 @@ pub async fn get_all_boards() -> Result<Vec<Box<Board>>> {
     init_db(db_url.as_str()).await;
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    let task_repo = TaskRepositoryImpl::new(db.clone()).await;
     let board_repo = BoardRepositoryImpl::new(db.clone()).await;
-    let board_uc = BoardUsecaseImpl::new(board_repo.clone());
+    let board_uc = BoardUsecaseImpl::new(board_repo.clone(), task_repo.clone());
 
     Ok(board_uc.get_all_boards().await)
 }

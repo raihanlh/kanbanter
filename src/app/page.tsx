@@ -1,6 +1,5 @@
 "use client";
 
-import { NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import {
   DragDropContext,
@@ -14,6 +13,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { invoke } from "@tauri-apps/api";
+import { NextPage } from "next";
 
 const getItems = (count: number) =>
   Array.from({ length: count }, (v, k) => k).map((k) => ({
@@ -23,12 +23,61 @@ const getItems = (count: number) =>
 
 const grid = 8;
 
-const reorder = (list: any[], startIndex: number, endIndex: number): any[] => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+const reorder = (
+  boards: Board[],
+  startDroppableId: number,
+  startIndex: number,
+  endDroppableId: number,
+  endIndex: number
+): Board[] => {
+  let newBoards = boards;
+  if (startDroppableId == endDroppableId) {
+    let idx: number = -1;
+    newBoards.forEach((board, index) => {
+      if (board.board_id == startDroppableId) {
+        idx = index;
+      }
+    });
+    const result = Array.from(
+      newBoards.filter((board) => board.board_id == startDroppableId)
+    )[0].tasks;
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    if (idx > -1) {
+      newBoards[idx].tasks = result;
+    }
+  } else {
+    console.log("HERE 2");
+    let idxSource: number = -1;
+    let idxDestination: number = -1;
 
-  return result;
+    newBoards.forEach((board, index) => {
+      if (board.board_id == startDroppableId) {
+        idxSource = index;
+      }
+      if (board.board_id == endDroppableId) {
+        idxDestination = index;
+      }
+    });
+
+    const resultSource = Array.from(
+      newBoards.filter((board) => board.board_id == startDroppableId)
+    )[0].tasks;
+
+    const resultDest = Array.from(
+      newBoards.filter((board) => board.board_id == endDroppableId)
+    )[0].tasks;
+
+    const [removed] = resultSource.splice(startIndex, 1);
+
+    resultDest.splice(endIndex, 0, removed);
+    if (idxSource >= 0 && idxDestination >= 0) {
+      newBoards[idxSource].tasks = resultSource;
+      newBoards[idxDestination].tasks = resultDest;
+    }
+  }
+
+  return newBoards;
 };
 
 const getListStyle = (isDraggingOver: boolean) => ({
@@ -55,9 +104,10 @@ interface ResData {
   content: string;
 }
 
-interface Board {
+interface Task {
+  task_id: number;
   board_id: number;
-  name: string;
+  title: string;
   description: string;
   position: number;
   created_at: Date;
@@ -65,8 +115,18 @@ interface Board {
   deleted_at: Date;
 }
 
-export default function Home() {
-  const [items, setItems] = useState<any[]>(getItems(10));
+interface Board {
+  board_id: number;
+  name: string;
+  description: string;
+  position: number;
+  tasks: Task[];
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
+}
+
+const Home: NextPage = () => {
   const [boards, setBoards] = useState<Board[]>([]);
   const [res, setRes] = useState<ResData[]>([]);
 
@@ -74,30 +134,31 @@ export default function Home() {
     invoke<ResData[]>("get_all_data", {})
       .then((result) => {
         setRes(result);
-        console.log(result); // Log the updated value of greeting
       })
       .catch(console.error);
     invoke<Board[]>("get_all_boards", {})
       .then((result) => {
         setBoards(result);
-        console.log(result); // Log the updated value of greeting
       })
       .catch(console.error);
   }, []);
 
   const onDragEnd: OnDragEndResponder = (result: DropResult) => {
+    console.log(result);
     // dropped outside the list
     if (!result.destination) {
       return;
     }
 
-    const newItems = reorder(
-      items,
+    const newBoards = reorder(
+      Array.from(boards),
+      Number(result.source.droppableId),
       result.source.index,
+      Number(result.destination.droppableId),
       result.destination.index
     );
 
-    setItems(newItems);
+    setBoards(newBoards);
   };
 
   return (
@@ -105,52 +166,56 @@ export default function Home() {
       <h1>DND PAGE</h1>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="flex flex-row">
-          {boards.map((board) => (
-            <div key={board.board_id} className="mx-2">
-              <h4>{board.name}</h4>
-              <Droppable
-                droppableId={`droppable-${board.board_id}`}
-                key={board.board_id}
-              >
-                {(
-                  provided: DroppableProvided,
-                  snapshot: DroppableStateSnapshot
-                ) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    style={getListStyle(snapshot.isDraggingOver)}
-                  >
-                    {res.map((item, index) => (
-                      <Draggable
-                        key={`${board.board_id}-${item.id}`}
-                        draggableId={`${board.board_id}-${item.id}`}
-                        index={index}
-                      >
-                        {(
-                          provided: DraggableProvided,
-                          snapshot: DraggableStateSnapshot
-                        ) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={getItemStyle(
-                              snapshot.isDragging,
-                              provided.draggableProps.style
-                            )}
-                          >
-                            {item.content}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          ))}
+          {boards &&
+            boards?.map((board) => (
+              <div key={board.board_id} className="mx-2">
+                <h4>{board.name}</h4>
+                <Droppable
+                  droppableId={`${board.board_id}`}
+                  key={board.board_id}
+                >
+                  {(
+                    provided: DroppableProvided,
+                    snapshot: DroppableStateSnapshot
+                  ) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={getListStyle(snapshot.isDraggingOver)}
+                    >
+                      {board.tasks.map(
+                        (item, index) =>
+                          item && (
+                            <Draggable
+                              key={`${board.board_id}-${item.task_id}`}
+                              draggableId={`${board.board_id}-${item.task_id}`}
+                              index={index}
+                            >
+                              {(
+                                provided: DraggableProvided,
+                                snapshot: DraggableStateSnapshot
+                              ) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={getItemStyle(
+                                    snapshot.isDragging,
+                                    provided.draggableProps.style
+                                  )}
+                                >
+                                  {item.title}
+                                </div>
+                              )}
+                            </Draggable>
+                          )
+                      )}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            ))}
         </div>
       </DragDropContext>
       {/* <Greet />
@@ -269,4 +334,6 @@ export default function Home() {
       </div> */}
     </main>
   );
-}
+};
+
+export default Home;
