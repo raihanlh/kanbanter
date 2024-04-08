@@ -9,11 +9,12 @@ pub async fn update(db: &Pool<Sqlite>, task: Task) -> Box<Task> {
     sqlx::query(
         UPDATE_TASK_QUERY,
     )
-    .bind(&task.title)
-    .bind(&task.description)
-    .bind(&task.board_id)
+    .bind(task.title)
+    .bind(task.description)
+    .bind(task.board_id)
+    .bind(task.position)
     .bind(now)
-    .bind(&task.position)
+    .bind(task.task_id)
     .execute(db)
     .await
     .unwrap();

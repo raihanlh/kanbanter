@@ -21,6 +21,7 @@ type ButtonProps = {
   };
 } & React.ComponentPropsWithRef<'button'>;
 
+// eslint-disable-next-line react/display-name
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {

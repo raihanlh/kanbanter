@@ -12,11 +12,7 @@ use crate::internals::{
     },
 };
 
-use super::init::init_db;
-
 pub async fn seed(db_url: String) {
-    init_db(db_url.as_str()).await;
-
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
     let board_repo = BoardRepositoryImpl::new(db.clone()).await;
     let task_repo = TaskRepositoryImpl::new(db.clone()).await;
