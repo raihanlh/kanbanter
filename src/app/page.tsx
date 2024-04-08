@@ -1,5 +1,9 @@
-import KanbanBoard from "@/components/board/KanbanBoard";
+'use client'
+
 import { NextPage } from "next";
+import dynamic from 'next/dynamic'
+
+const KanbanBoard = dynamic(() => import('@/components/board/KanbanBoard'), { ssr: false })
 
 const Home: NextPage = () => {
   return (
