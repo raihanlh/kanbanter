@@ -22,10 +22,49 @@ pub async fn init() {
         .invoke_handler(tauri::generate_handler![
             get_all_boards,
             get_all_data,
-            update_task_by_id
+            update_task_by_id,
+            update_board,
+            delete_board
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+#[command]
+pub async fn create_new_board(board: Board) -> Result<Box<Board>> {
+    let db_url = env::var("DB_URL").unwrap();
+
+    let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    let task_repo = TaskRepositoryImpl::new(db.clone()).await;
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let board_uc = BoardUsecaseImpl::new(board_repo.clone(), task_repo.clone());
+
+    Ok(board_uc.create_new_board(board).await)
+}
+
+
+#[command]
+pub async fn update_board(board: Board) -> Result<Box<Board>> {
+    let db_url = env::var("DB_URL").unwrap();
+
+    let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    let task_repo = TaskRepositoryImpl::new(db.clone()).await;
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let board_uc = BoardUsecaseImpl::new(board_repo.clone(), task_repo.clone());
+
+    Ok(board_uc.update_board_by_id(board).await)
+}
+
+#[command]
+pub async fn delete_board(id: i64) -> Result<bool> {
+    let db_url = env::var("DB_URL").unwrap();
+
+    let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    let task_repo = TaskRepositoryImpl::new(db.clone()).await;
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let board_uc = BoardUsecaseImpl::new(board_repo.clone(), task_repo.clone());
+
+    Ok(board_uc.delete_board_by_id(id).await)
 }
 
 #[command]
