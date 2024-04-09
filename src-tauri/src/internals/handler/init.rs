@@ -3,19 +3,16 @@ use std::env;
 use sqlx::SqlitePool;
 use tauri::{command, Result};
 
-use crate::{
-    internals::{
-        model::{board::Board, res_data::ResData, task::Task},
+use crate::internals::{
+        model::{board::Board, task::Task},
         repository::sqlite::{
-            board::BoardRepositoryImpl, res_data::ResDataRepoImpl, task::TaskRepositoryImpl,
+            board::BoardRepositoryImpl, task::TaskRepositoryImpl,
         },
         usecase::{
             board::BoardUsecase, board_impl::BoardUsecaseImpl, task::TaskUsecase,
             task_impl::TaskUsecaseImpl,
         },
-    },
-    ResDataHandler, ResDataHandlerImpl,
-};
+    };
 
 pub async fn init() {
     tauri::Builder::default()
