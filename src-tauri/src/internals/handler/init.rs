@@ -21,7 +21,6 @@ pub async fn init() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             get_all_boards,
-            get_all_data,
             update_task_by_id,
             update_board,
             delete_board
@@ -79,6 +78,19 @@ pub async fn get_all_boards() -> Result<Vec<Box<Board>>> {
     Ok(board_uc.get_all_boards().await)
 }
 
+// Task Handler
+
+#[command]
+pub async fn create_new_task(task: Task) -> Result<Box<Task>> {
+    let db_url = env::var("DB_URL").unwrap();
+
+    let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    let task_repo = TaskRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+
+    Ok(task_uc.create_new_task(task).await)
+}
+
 #[command]
 pub async fn update_task_by_id(task: Task) -> Result<Box<Task>> {
     let db_url = env::var("DB_URL").unwrap();
@@ -90,11 +102,24 @@ pub async fn update_task_by_id(task: Task) -> Result<Box<Task>> {
     Ok(task_uc.update_task_by_id(task).await)
 }
 
-#[tauri::command]
-fn get_all_data() -> Result<Vec<ResData>> {
-    let repo = ResDataRepoImpl::new();
-    let handler = ResDataHandlerImpl::new(Box::new(repo));
-    let res = handler.get_all_data();
+#[command]
+pub async fn delete_task_by_id(id: i64) -> Result<bool> {
+    let db_url = env::var("DB_URL").unwrap();
 
-    res
+    let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    let task_repo = TaskRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+
+    Ok(task_uc.delete_task_by_id(id).await)
+}
+
+#[command]
+pub async fn get_task_by_id(id: i64) -> Result<Box<Task>> {
+    let db_url = env::var("DB_URL").unwrap();
+
+    let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    let task_repo = TaskRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+
+    Ok(task_uc.get_task_by_id(id).await)
 }
