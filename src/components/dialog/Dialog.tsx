@@ -1,10 +1,29 @@
-import { FC, Fragment, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  FC,
+  Fragment,
+  SetStateAction,
+  useRef,
+  useState,
+} from "react";
 import { Dialog as DialogHeadlessUI, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
-export const Dialog: FC = () => {
-  const [open, setOpen] = useState(true);
+interface DialogProps {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  title: string;
+  content: React.ReactNode;
+  buttonText: string;
+}
 
+export const Dialog: FC<DialogProps> = ({
+  open,
+  setOpen,
+  title,
+  content,
+  buttonText,
+}) => {
   const cancelButtonRef = useRef(null);
 
   return (
@@ -52,14 +71,10 @@ export const Dialog: FC = () => {
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
-                        Deactivate account
+                        {title}
                       </DialogHeadlessUI.Title>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Are you sure you want to deactivate your account? All
-                          of your data will be permanently removed. This action
-                          cannot be undone.
-                        </p>
+                        <p className="text-sm text-gray-500">{content}</p>
                       </div>
                     </div>
                   </div>
@@ -67,10 +82,10 @@ export const Dialog: FC = () => {
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                    className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                     onClick={() => setOpen(false)}
                   >
-                    Deactivate
+                    {buttonText}
                   </button>
                   <button
                     type="button"

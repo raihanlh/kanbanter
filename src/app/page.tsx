@@ -1,17 +1,32 @@
 "use client";
 
+import Button from "@/components/buttons/Button";
 import { Dialog } from "@/components/dialog/Dialog";
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 
 const KanbanBoard = dynamic(() => import("@/components/board/KanbanBoard"), {
   ssr: false,
 });
 
 const Home: NextPage = () => {
+  const [open, setOpen] = useState(false);
+
   return (
     <main>
-      <Dialog />
+      <header className="w-screen flex justify-end">
+        <Button
+          className="m-4"
+          onClick={(e) => {
+            e.preventDefault();
+            setOpen(true);
+          }}
+        >
+          <h4>+</h4>
+        </Button>
+      </header>
+      <Dialog open={open} setOpen={setOpen} title={"Add new board"} content={<p>Add new board</p>} buttonText="Submit" />
       <KanbanBoard />
       {/* <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">

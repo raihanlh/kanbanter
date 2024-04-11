@@ -153,7 +153,6 @@ const KanbanBoard: React.FC = () => {
 
   return (
     <main>
-      <h1>DND PAGE</h1>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="flex flex-row">
           {boards &&
