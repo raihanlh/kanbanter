@@ -25,7 +25,10 @@ impl BoardUsecaseImpl {
 
 #[async_trait]
 impl BoardUsecase for BoardUsecaseImpl {
-    async fn create_new_board(&self, board: Board) -> Box<Board> {
+    async fn create_new_board(&self, mut board: Board) -> Box<Board> {
+        board.position = self.repo.get_highest_board_position().await;
+        board.created_at = chrono::Local::now();
+        board.updated_at = chrono::Local::now();
         self.repo.insert(board).await
     }
 

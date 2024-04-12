@@ -32,13 +32,13 @@ export const CreateBoardDialog: FC<CreateBoardDialogProps> = ({
           <TextEditor
             enableMenuBar={false}
             onUpdate={({ editor, transaction }) => {
-              setName(editor.getText.toString);
+              setName(editor?.getText().toString());
             }}
             content="Title"
           />
           <TextEditor
             onUpdate={({ editor, transaction }) => {
-              setDescription(editor.getText.toString);
+              setDescription(editor?.getText().toString());
             }}
           />
         </>
