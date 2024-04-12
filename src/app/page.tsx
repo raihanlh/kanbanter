@@ -12,12 +12,6 @@ import { useEffect, useState } from "react";
 const KanbanBoard = dynamic(() => import("@/components/board/KanbanBoard"), {
   ssr: false,
 });
-const Button = dynamic<ButtonProps>(
-  () => import("@/components/buttons/Button"),
-  {
-    ssr: false,
-  }
-);
 const CreateBoardDialog = dynamic<CreateBoardDialogProps>(
   () => import("@/module/dialog/CreateBoardDialog"),
   {

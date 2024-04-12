@@ -1,3 +1,5 @@
+"use client";
+
 import "./styles.scss";
 
 import { Color } from "@tiptap/extension-color";
@@ -23,6 +25,7 @@ import { BiCodeBlock } from "react-icons/bi";
 import { GrBlockQuote } from "react-icons/gr";
 import { VscHorizontalRule } from "react-icons/vsc";
 import { Transaction } from "@tiptap/pm/state";
+import { EditorProps } from "@tiptap/pm/view";
 
 const MenuBar = () => {
   const { editor } = useCurrentEditor();
@@ -178,58 +181,32 @@ const extensions = [
   }),
 ];
 
-const defaultContent = `
-<h2>
-  Hi there,
-</h2>
-<p>
-  this is a <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
-</p>
-<ul>
-  <li>
-    That’s a bullet list with one …
-  </li>
-  <li>
-    … or two list items.
-  </li>
-</ul>
-<p>
-  Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
-</p>
-<pre><code class="language-css">body {
-display: none;
-}</code></pre>
-<p>
-  I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
-</p>
-<blockquote>
-  Wow, that’s amazing. Good work, boy! 👏
-  <br />
-  — Mom
-</blockquote>
-`;
-
-interface TextEditorProps {
+export interface TextEditorProps {
   onUpdate: (props: { editor: Editor; transaction: Transaction }) => void;
   content?: string;
   enableMenuBar?: boolean;
+  editorProps?: EditorProps<any>;
 }
 
 export const TextEditor: FC<TextEditorProps> = ({
   onUpdate,
-  content = defaultContent,
+  content = "",
   enableMenuBar = true,
+  editorProps,
 }) => {
   return (
-    <div className="divide-y divide-dashed md:divide-solid space-y-3">
+    <div className="divide-y divide-dashed md:divide-solid space-y-3 border border-sky-500 rounded p-2">
       <EditorProvider
         slotBefore={enableMenuBar ? <MenuBar /> : null}
         extensions={extensions}
         content={content}
         onUpdate={onUpdate}
+        editorProps={editorProps}
       >
         <></>
       </EditorProvider>
     </div>
   );
 };
+
+export default TextEditor;

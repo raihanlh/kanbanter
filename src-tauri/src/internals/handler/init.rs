@@ -31,7 +31,6 @@ pub async fn create_new_board(name: String, description: String) -> Result<Box<B
     board.name = name;
     board.description = description;
 
-    print!("{:?}", serde_json::to_string(&board));
     let db_url = env::var("DB_URL").unwrap();
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
