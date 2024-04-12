@@ -1,23 +1,46 @@
 "use client";
 
-import Button from "@/components/buttons/Button";
-import { Dialog } from "@/components/dialog/Dialog";
-import { TextEditor } from "@/components/textEditor/TextEditor";
+import { ButtonProps } from "@/components/buttons/Button";
+import { getAllBoards } from "@/invoker/getAllBoards";
+import { Board } from "@/model/board";
+import { CreateBoardDialogProps } from "@/module/dialog/CreateBoardDialog";
+import { invoke } from "@tauri-apps/api";
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const KanbanBoard = dynamic(() => import("@/components/board/KanbanBoard"), {
   ssr: false,
 });
+const Button = dynamic<ButtonProps>(
+  () => import("@/components/buttons/Button"),
+  {
+    ssr: false,
+  }
+);
+const CreateBoardDialog = dynamic<CreateBoardDialogProps>(
+  () => import("@/module/dialog/CreateBoardDialog"),
+  {
+    ssr: false,
+  }
+);
 
 const Home: NextPage = () => {
   const [open, setOpen] = useState(false);
+  const [boards, setBoards] = useState<Board[]>([]);
+
+  useEffect(() => {
+    invoke<Board[]>("get_all_boards", {})
+      .then((result) => {
+        setBoards(result);
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <main>
       <header className="w-screen flex justify-end">
-        <Button
+        <button
           className="m-4"
           onClick={(e) => {
             e.preventDefault();
@@ -25,20 +48,31 @@ const Home: NextPage = () => {
           }}
         >
           <h4>+</h4>
-        </Button>
+        </button>
       </header>
-      <Dialog
+      <CreateBoardDialog
         open={open}
         setOpen={setOpen}
-        title={"Add new board"}
-        content={
-          <>
-            <TextEditor />
-          </>
-        }
-        buttonText="Submit"
+        onSubmit={async (name, description) => {
+          try {
+            console.log("INVOKE!");
+            await invoke<Board>("create_new_board", {
+              name,
+              description,
+            })
+              .then((result) => {
+                console.log("result", result);
+              })
+              .catch(console.error);
+
+            let res = await getAllBoards();
+            setBoards(res);
+          } catch (e) {
+            console.log(e);
+          }
+        }}
       />
-      <KanbanBoard />
+      <KanbanBoard boards={boards} setBoards={setBoards} />
       {/* <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           Get started by editing&nbsp;

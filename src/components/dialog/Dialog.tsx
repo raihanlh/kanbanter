@@ -14,6 +14,7 @@ interface DialogProps {
   title: string;
   content: React.ReactNode;
   buttonText: string;
+  onSubmit: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export const Dialog: FC<DialogProps> = ({
@@ -22,6 +23,7 @@ export const Dialog: FC<DialogProps> = ({
   title,
   content,
   buttonText,
+  onSubmit,
 }) => {
   const cancelButtonRef = useRef(null);
 
@@ -67,7 +69,7 @@ export const Dialog: FC<DialogProps> = ({
                         {title}
                       </DialogHeadlessUI.Title>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-500">{content}</p>
+                        <div className="text-sm text-gray-500">{content}</div>
                       </div>
                     </div>
                   </div>
@@ -76,7 +78,7 @@ export const Dialog: FC<DialogProps> = ({
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                    onClick={() => setOpen(false)}
+                    onClick={onSubmit}
                   >
                     {buttonText}
                   </button>
@@ -97,3 +99,5 @@ export const Dialog: FC<DialogProps> = ({
     </Transition.Root>
   );
 };
+
+export default Dialog;

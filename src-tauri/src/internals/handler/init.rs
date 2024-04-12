@@ -4,20 +4,19 @@ use sqlx::SqlitePool;
 use tauri::{command, Result};
 
 use crate::internals::{
-        model::{board::Board, task::Task},
-        repository::sqlite::{
-            board::BoardRepositoryImpl, task::TaskRepositoryImpl,
-        },
-        usecase::{
-            board::BoardUsecase, board_impl::BoardUsecaseImpl, task::TaskUsecase,
-            task_impl::TaskUsecaseImpl,
-        },
-    };
+    model::{board::Board, task::Task},
+    repository::sqlite::{board::BoardRepositoryImpl, task::TaskRepositoryImpl},
+    usecase::{
+        board::BoardUsecase, board_impl::BoardUsecaseImpl, task::TaskUsecase,
+        task_impl::TaskUsecaseImpl,
+    },
+};
 
 pub async fn init() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             get_all_boards,
+            create_new_board,
             update_task_by_id,
             update_board,
             delete_board
@@ -27,7 +26,12 @@ pub async fn init() {
 }
 
 #[command]
-pub async fn create_new_board(board: Board) -> Result<Box<Board>> {
+pub async fn create_new_board(name: String, description: String) -> Result<Box<Board>> {
+    let mut board: Board = Board::default();
+    board.name = name;
+    board.description = description;
+
+    print!("{:?}", serde_json::to_string(&board));
     let db_url = env::var("DB_URL").unwrap();
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
@@ -37,7 +41,6 @@ pub async fn create_new_board(board: Board) -> Result<Box<Board>> {
 
     Ok(board_uc.create_new_board(board).await)
 }
-
 
 #[command]
 pub async fn update_board(board: Board) -> Result<Box<Board>> {

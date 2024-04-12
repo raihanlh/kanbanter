@@ -3,9 +3,9 @@ import "./styles.scss";
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import TextStyle from "@tiptap/extension-text-style";
-import { EditorProvider, useCurrentEditor } from "@tiptap/react";
+import { Editor, EditorProvider, useCurrentEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React from "react";
+import React, { FC } from "react";
 import {
   BsTypeBold,
   BsTypeItalic,
@@ -22,6 +22,7 @@ import { RiListOrdered, RiListUnordered } from "react-icons/ri";
 import { BiCodeBlock } from "react-icons/bi";
 import { GrBlockQuote } from "react-icons/gr";
 import { VscHorizontalRule } from "react-icons/vsc";
+import { Transaction } from "@tiptap/pm/state";
 
 const MenuBar = () => {
   const { editor } = useCurrentEditor();
@@ -177,7 +178,7 @@ const extensions = [
   }),
 ];
 
-const content = `
+const defaultContent = `
 <h2>
   Hi there,
 </h2>
@@ -208,13 +209,24 @@ display: none;
 </blockquote>
 `;
 
-export const TextEditor = () => {
+interface TextEditorProps {
+  onUpdate: (props: { editor: Editor; transaction: Transaction }) => void;
+  content?: string;
+  enableMenuBar?: boolean;
+}
+
+export const TextEditor: FC<TextEditorProps> = ({
+  onUpdate,
+  content = defaultContent,
+  enableMenuBar = true,
+}) => {
   return (
     <div className="divide-y divide-dashed md:divide-solid space-y-3">
       <EditorProvider
-        slotBefore={<MenuBar />}
+        slotBefore={enableMenuBar ? <MenuBar /> : null}
         extensions={extensions}
         content={content}
+        onUpdate={onUpdate}
       >
         <></>
       </EditorProvider>

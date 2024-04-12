@@ -13,6 +13,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { invoke } from "@tauri-apps/api";
+import { Board } from "@/model/board";
 
 const grid = 8;
 
@@ -87,39 +88,12 @@ interface ResData {
   content: string;
 }
 
-interface Task {
-  task_id: number;
-  board_id: number;
-  title: string;
-  description: string;
-  position: number;
-  created_at: Date;
-  updated_at: Date;
-  deleted_at: Date;
+export interface KanbanBoardProps {
+  boards: Board[];
+  setBoards: React.Dispatch<React.SetStateAction<Board[]>>;
 }
 
-interface Board {
-  board_id: number;
-  name: string;
-  description: string;
-  position: number;
-  tasks: Task[];
-  created_at: Date;
-  updated_at: Date;
-  deleted_at: Date;
-}
-
-const KanbanBoard: React.FC = () => {
-  const [boards, setBoards] = useState<Board[]>([]);
-
-  useEffect(() => {
-    invoke<Board[]>("get_all_boards", {})
-      .then((result) => {
-        setBoards(result);
-      })
-      .catch(console.error);
-  }, []);
-
+const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
   const onDragEnd: OnDragEndResponder = async (result: DropResult) => {
     // dropped outside the list
     if (!result.destination) {
