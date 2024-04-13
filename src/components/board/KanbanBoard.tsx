@@ -14,6 +14,10 @@ import {
 } from "@hello-pangea/dnd";
 import { invoke } from "@tauri-apps/api";
 import { Board } from "@/model/board";
+import { DropdownMenu } from "../menu/DropdownMenu";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { deleteBoardById } from "@/invoker/deleteBoardById";
+import { getAllBoards } from "@/invoker/getAllBoards";
 
 const grid = 8;
 
@@ -126,13 +130,40 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
   };
 
   return (
-    <main>
+    <div>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="flex flex-row">
           {boards &&
             boards?.map((board) => (
               <div key={board.board_id} className="mx-2">
-                <h4>{board.name}</h4>
+                <div className="flex justify-between">
+                  <h4>{board.name}</h4>
+                  <DropdownMenu
+                    text={<BsThreeDotsVertical />}
+                    dropdownItems={[
+                      {
+                        text: "Edit",
+                        onClick: (e) => {
+                          e.preventDefault();
+                        },
+                      },
+                      {
+                        text: "Delete",
+                        onClick: async (e) => {
+                          try {
+                            e.preventDefault();
+                            await deleteBoardById(board.board_id);
+
+                            let newBoards = await getAllBoards();
+                            setBoards(newBoards);
+                          } catch (e) {
+                            console.log(e);
+                          }
+                        },
+                      },
+                    ]}
+                  />
+                </div>
                 <Droppable
                   droppableId={`${board.board_id}`}
                   key={board.board_id}
@@ -181,7 +212,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
             ))}
         </div>
       </DragDropContext>
-    </main>
+    </div>
   );
 };
 
