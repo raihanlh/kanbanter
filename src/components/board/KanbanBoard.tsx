@@ -18,6 +18,8 @@ import { DropdownMenu } from "../menu/DropdownMenu";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { deleteBoardById } from "@/invoker/deleteBoardById";
 import { getAllBoards } from "@/invoker/getAllBoards";
+import CreateBoardDialog from "@/module/dialog/CreateBoardDialog";
+import { editBoard } from "@/invoker/editBoard";
 
 const grid = 8;
 
@@ -98,6 +100,9 @@ export interface KanbanBoardProps {
 }
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
+  const [boardEdit, setBoardEdit] = useState<Board | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
+
   const onDragEnd: OnDragEndResponder = async (result: DropResult) => {
     // dropped outside the list
     if (!result.destination) {
@@ -131,6 +136,35 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
 
   return (
     <div>
+      {boardEdit && (
+        <CreateBoardDialog
+          title="Edit board"
+          open={open && Boolean(boardEdit)}
+          setOpen={setOpen}
+          boardName={boardEdit.name}
+          boardContent={boardEdit.description}
+          onSubmit={async (name, description) => {
+            try {
+              let newBoard = Object.assign({}, boardEdit);
+              if (newBoard) {
+                newBoard.name = name;
+                newBoard.description = description;
+                let res = await editBoard(newBoard);
+
+                console.log(res);
+
+                let newBoards = await getAllBoards();
+                setBoards(newBoards);
+              }
+
+              setBoardEdit(null);
+              setOpen(false);
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+        />
+      )}
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="flex flex-row">
           {boards &&
@@ -144,7 +178,14 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                       {
                         text: "Edit",
                         onClick: (e) => {
-                          e.preventDefault();
+                          try {
+                            e.preventDefault();
+
+                            setBoardEdit(board);
+                            setOpen(true);
+                          } catch (e) {
+                            console.log(e);
+                          }
                         },
                       },
                       {
