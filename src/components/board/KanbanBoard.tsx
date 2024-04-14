@@ -12,7 +12,7 @@ import {
   OnDragEndResponder,
   DropResult,
 } from "@hello-pangea/dnd";
-import { invoke } from "@tauri-apps/api";
+import { invoke } from "@tauri-apps/api/tauri";
 import { Board } from "@/model/board";
 import { DropdownMenu } from "../menu/DropdownMenu";
 import { BsThreeDotsVertical } from "react-icons/bs";

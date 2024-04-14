@@ -4,7 +4,7 @@ import { ButtonProps } from "@/components/buttons/Button";
 import { getAllBoards } from "@/invoker/getAllBoards";
 import { Board } from "@/model/board";
 import { CreateBoardDialogProps } from "@/module/dialog/CreateBoardDialog";
-import { invoke } from "@tauri-apps/api";
+import { invoke } from "@tauri-apps/api/tauri";
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
