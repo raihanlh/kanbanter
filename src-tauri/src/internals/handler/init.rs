@@ -19,7 +19,8 @@ pub async fn init() {
             create_new_board,
             update_task_by_id,
             update_board,
-            delete_board
+            delete_board,
+            create_new_task
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -80,8 +81,17 @@ pub async fn get_all_boards() -> Result<Vec<Box<Board>>> {
 // Task Handler
 
 #[command]
-pub async fn create_new_task(task: Task) -> Result<Box<Task>> {
+pub async fn create_new_task(
+    board_id: i64,
+    title: String,
+    description: String,
+) -> Result<Box<Task>> {
     let db_url = env::var("DB_URL").unwrap();
+
+    let mut task = Task::default();
+    task.board_id = board_id;
+    task.title = title;
+    task.description = description;
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
     let task_repo = TaskRepositoryImpl::new(db.clone()).await;

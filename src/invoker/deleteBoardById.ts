@@ -1,4 +1,3 @@
-import { Board } from "@/model/board";
 import { invoke } from "@tauri-apps/api/tauri";
 
 export const deleteBoardById = async (id: number) => {

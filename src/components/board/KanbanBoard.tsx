@@ -20,6 +20,8 @@ import { deleteBoardById } from "@/invoker/deleteBoardById";
 import { getAllBoards } from "@/invoker/getAllBoards";
 import CreateBoardDialog from "@/module/dialog/CreateBoardDialog";
 import { editBoard } from "@/invoker/editBoard";
+import CreateTaskDialog from "@/module/dialog/CreateTaskDialog";
+import { createTask } from "@/invoker/createTask";
 
 const grid = 8;
 
@@ -89,11 +91,6 @@ const getItemStyle = (isDragging: any, draggableStyle: any) => ({
   ...draggableStyle,
 });
 
-interface ResData {
-  id: number;
-  content: string;
-}
-
 export interface KanbanBoardProps {
   boards: Board[];
   setBoards: React.Dispatch<React.SetStateAction<Board[]>>;
@@ -101,7 +98,9 @@ export interface KanbanBoardProps {
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
   const [boardEdit, setBoardEdit] = useState<Board | null>(null);
+  const [boardAddTask, setBoardAddTask] = useState<Board | null>(null);
   const [open, setOpen] = useState<boolean>(false);
+  const [openAddTask, setOpenAddTask] = useState<boolean>(false);
 
   const onDragEnd: OnDragEndResponder = async (result: DropResult) => {
     // dropped outside the list
@@ -158,6 +157,35 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
               }
 
               setBoardEdit(null);
+              setOpen(false);
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+        />
+      )}
+      {boardAddTask && (
+        <CreateTaskDialog
+          title={`Add new task on ${boardAddTask?.name}`}
+          open={openAddTask && Boolean(boardAddTask)}
+          setOpen={setOpenAddTask}
+          boardName={boardAddTask.name}
+          boardContent={boardAddTask.description}
+          onSubmit={async (name, description) => {
+            try {
+              if (boardAddTask) {
+                let res = await createTask(
+                  boardAddTask.board_id,
+                  name,
+                  description
+                );
+
+                console.log(res);
+
+                let newBoards = await getAllBoards();
+                setBoards(newBoards);
+              }
+              setBoardAddTask(null);
               setOpen(false);
             } catch (e) {
               console.log(e);
@@ -249,6 +277,18 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                     </div>
                   )}
                 </Droppable>
+                <div className="flex justify-end">
+                  <button
+                    className="m-4"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setBoardAddTask(board);
+                      setOpenAddTask(true);
+                    }}
+                  >
+                    <h4>+</h4>
+                  </button>
+                </div>
               </div>
             ))}
         </div>

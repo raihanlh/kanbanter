@@ -18,7 +18,10 @@ impl TaskUsecaseImpl {
 
 #[async_trait]
 impl TaskUsecase for TaskUsecaseImpl {
-    async fn create_new_task(&self, task: Task) -> Box<Task> {
+    async fn create_new_task(&self, mut task: Task) -> Box<Task> {
+      task.position = self.repo.get_highest_task_position(task.board_id).await;
+      task.created_at = chrono::Local::now();
+      task.updated_at = chrono::Local::now();
       self.repo.insert(task).await
     }
     async fn get_task_by_id(&self, id: i64) -> Box<Task> {

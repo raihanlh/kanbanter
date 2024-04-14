@@ -5,14 +5,6 @@ import { defaultBoardContent, defaultBoardTitle } from "@/constants/constants";
 import dynamic from "next/dynamic";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 
-export interface CreateBoardDialogProps {
-  title: string;
-  open: boolean;
-  setOpen?: () => void;
-  // onSubmit: MouseEventHandler<HTMLButtonElement>;
-  onSubmit: (name: string, description: string) => void;
-}
-
 const Dialog = dynamic(() => import("@/components/dialog/Dialog"), {
   ssr: false,
 });
@@ -23,14 +15,28 @@ const TextEditor = dynamic<TextEditorProps>(
   }
 );
 
-export const EditBoardDialog: FC<CreateBoardDialogProps> = ({
-  title,
+export interface CreateTaskDialogProps {
+  title?: string;
+  boardName?: string;
+  boardContent?: string;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  // onSubmit: MouseEventHandler<HTMLButtonElement>;
+  onSubmit: (name: string, description: string) => void;
+}
+
+export const CreateTaskDialog: FC<CreateTaskDialogProps> = ({
+  title = "Add new task",
+  boardName,
+  boardContent,
   open,
   setOpen,
   onSubmit,
 }) => {
-  const [name, setName] = useState<string>(defaultBoardTitle);
-  const [description, setDescription] = useState<string>(defaultBoardContent);
+  const [name, setName] = useState<string>(boardName ?? defaultBoardTitle);
+  const [description, setDescription] = useState<string>(
+    boardContent ?? defaultBoardContent
+  );
 
   return (
     <Dialog
@@ -65,9 +71,10 @@ export const EditBoardDialog: FC<CreateBoardDialogProps> = ({
       onSubmit={async (e) => {
         e.preventDefault();
         onSubmit(name, description);
+        setOpen(false);
       }}
     />
   );
 };
 
-export default EditBoardDialog;
+export default CreateTaskDialog;
