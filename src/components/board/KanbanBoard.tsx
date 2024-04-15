@@ -22,6 +22,9 @@ import CreateBoardDialog from "@/module/dialog/CreateBoardDialog";
 import { editBoard } from "@/invoker/editBoard";
 import CreateTaskDialog from "@/module/dialog/CreateTaskDialog";
 import { createTask } from "@/invoker/createTask";
+import { deleteTaskById } from "@/invoker/deleteTaskById";
+import { editTask } from "@/invoker/editTask";
+import { Task } from "@/model/task";
 
 const grid = 8;
 
@@ -98,9 +101,13 @@ export interface KanbanBoardProps {
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
   const [boardEdit, setBoardEdit] = useState<Board | null>(null);
-  const [boardAddTask, setBoardAddTask] = useState<Board | null>(null);
   const [open, setOpen] = useState<boolean>(false);
+
+  const [boardAddTask, setBoardAddTask] = useState<Board | null>(null);
   const [openAddTask, setOpenAddTask] = useState<boolean>(false);
+
+  const [taskEdit, setTaskEdit] = useState<Task | null>(null);
+  const [openTaskEdit, setOpenTaskEdit] = useState<boolean>(false);
 
   const onDragEnd: OnDragEndResponder = async (result: DropResult) => {
     // dropped outside the list
@@ -118,11 +125,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
 
     for (let board of newBoards) {
       for (let task of board.tasks) {
-        await invoke<Task>("update_task_by_id", { task })
-          .then((result) => {
-            console.log(result);
-          })
-          .catch(console.error);
+        await editTask(task);
       }
     }
 
@@ -137,7 +140,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
     <div>
       {boardEdit && (
         <CreateBoardDialog
-          title="Edit board"
+          title="Edit swimlane"
           open={open && Boolean(boardEdit)}
           setOpen={setOpen}
           boardName={boardEdit.name}
@@ -187,6 +190,35 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
               }
               setBoardAddTask(null);
               setOpen(false);
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+        />
+      )}
+      {taskEdit && (
+        <CreateBoardDialog
+          title="Edit task"
+          open={openTaskEdit && Boolean(taskEdit)}
+          setOpen={setOpenTaskEdit}
+          boardName={taskEdit.title}
+          boardContent={taskEdit.description}
+          onSubmit={async (name, description) => {
+            try {
+              let newTask = Object.assign({}, taskEdit);
+              if (newTask) {
+                newTask.title = name;
+                newTask.description = description;
+                let res = await editTask(newTask);
+
+                console.log(res);
+
+                let newBoards = await getAllBoards();
+                setBoards(newBoards);
+              }
+
+              setTaskEdit(null);
+              setOpenTaskEdit(false);
             } catch (e) {
               console.log(e);
             }
@@ -267,7 +299,44 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                                     provided.draggableProps.style
                                   )}
                                 >
-                                  {item.title}
+                                  <div className="flex justify-between">
+                                    <h4>{item.title}</h4>
+                                    <DropdownMenu
+                                      text={<BsThreeDotsVertical />}
+                                      dropdownItems={[
+                                        {
+                                          text: "Edit",
+                                          onClick: (e) => {
+                                            try {
+                                              e.preventDefault();
+
+                                              setTaskEdit(item);
+                                              setOpenTaskEdit(true);
+                                            } catch (e) {
+                                              console.log(e);
+                                            }
+                                          },
+                                        },
+                                        {
+                                          text: "Delete",
+                                          onClick: async (e) => {
+                                            try {
+                                              e.preventDefault();
+                                              await deleteTaskById(
+                                                item.task_id
+                                              );
+
+                                              let newBoards =
+                                                await getAllBoards();
+                                              setBoards(newBoards);
+                                            } catch (e) {
+                                              console.log(e);
+                                            }
+                                          },
+                                        },
+                                      ]}
+                                    />
+                                  </div>
                                 </div>
                               )}
                             </Draggable>

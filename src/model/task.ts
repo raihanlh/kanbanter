@@ -1,4 +1,4 @@
-interface Task {
+export interface Task {
   task_id: number;
   board_id: number;
   title: string;

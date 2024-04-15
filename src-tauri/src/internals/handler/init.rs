@@ -17,10 +17,11 @@ pub async fn init() {
         .invoke_handler(tauri::generate_handler![
             get_all_boards,
             create_new_board,
-            update_task_by_id,
             update_board,
             delete_board,
-            create_new_task
+            create_new_task,
+            update_task,
+            delete_task_by_id
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -101,7 +102,7 @@ pub async fn create_new_task(
 }
 
 #[command]
-pub async fn update_task_by_id(task: Task) -> Result<Box<Task>> {
+pub async fn update_task(task: Task) -> Result<Box<Task>> {
     let db_url = env::var("DB_URL").unwrap();
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();

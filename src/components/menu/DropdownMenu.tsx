@@ -51,9 +51,9 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                   <>
                     {item.leftIcon}
                     <button
-                      type="submit"
+                      type="button"
                       className={classNames(
-                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                        "text-gray-700 hover:bg-gray-100",
                         "block w-full px-4 py-2 text-left text-sm"
                       )}
                       onClick={item.onClick}

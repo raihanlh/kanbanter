@@ -21,12 +21,11 @@ export interface CreateBoardDialogProps {
   boardContent?: string;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  // onSubmit: MouseEventHandler<HTMLButtonElement>;
   onSubmit: (name: string, description: string) => void;
 }
 
 export const CreateBoardDialog: FC<CreateBoardDialogProps> = ({
-  title = "Add new board",
+  title = "Add new swimlane",
   boardName,
   boardContent,
   open,
