@@ -48,16 +48,16 @@ export const CreateBoardDialog: FC<CreateBoardDialogProps> = ({
             <TextEditor
               enableMenuBar={false}
               onUpdate={({ editor, transaction }) => {
-                setName(editor?.getText().toString());
+                setName(editor?.getHTML().toString());
               }}
               content={name}
             />
           </div>
           <TextEditor
             onUpdate={({ editor, transaction }) => {
-              setDescription(editor?.getText().toString());
+              setDescription(editor?.getHTML().toString());
             }}
-            content={defaultBoardContent}
+            content={description}
             editorProps={{
               attributes: {
                 class: "mt-3",

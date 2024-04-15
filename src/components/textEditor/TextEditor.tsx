@@ -186,6 +186,7 @@ export interface TextEditorProps {
   content?: string;
   enableMenuBar?: boolean;
   editorProps?: EditorProps<any>;
+  editable?: boolean;
 }
 
 export const TextEditor: FC<TextEditorProps> = ({
@@ -193,10 +194,12 @@ export const TextEditor: FC<TextEditorProps> = ({
   content = "",
   enableMenuBar = true,
   editorProps,
+  editable = true,
 }) => {
   return (
     <div className="divide-y divide-dashed md:divide-solid space-y-3 border border-sky-500 rounded p-2">
       <EditorProvider
+        editable={editable}
         slotBefore={enableMenuBar ? <MenuBar /> : null}
         extensions={extensions}
         content={content}

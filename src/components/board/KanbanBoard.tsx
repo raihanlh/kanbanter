@@ -26,6 +26,13 @@ import { deleteTaskById } from "@/invoker/deleteTaskById";
 import { editTask } from "@/invoker/editTask";
 import { Task } from "@/model/task";
 import { CiSquarePlus } from "react-icons/ci";
+import Tippy from "@tippyjs/react/headless";
+import { Editor, generateHTML } from "@tiptap/react";
+import Bold from "@tiptap/extension-bold";
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import TextEditor from "../textEditor/TextEditor";
 
 const grid = 8;
 
@@ -173,8 +180,6 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
           title={`Add new task on ${boardAddTask?.name}`}
           open={openAddTask && Boolean(boardAddTask)}
           setOpen={setOpenAddTask}
-          boardName={boardAddTask.name}
-          boardContent={boardAddTask.description}
           onSubmit={async (name, description) => {
             try {
               if (boardAddTask) {
@@ -292,55 +297,83 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                                 provided: DraggableProvided,
                                 snapshot: DraggableStateSnapshot
                               ) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  style={getItemStyle(
-                                    snapshot.isDragging,
-                                    provided.draggableProps.style
+                                <Tippy
+                                  interactive={true}
+                                  placement="auto"
+                                  arrow={true}
+                                  render={(attrs) => (
+                                    <div
+                                      className="rounded bg-gray-700 m-3 p-3 space-y-3"
+                                      tabIndex={-1}
+                                      {...attrs}
+                                    >
+                                      <h3>{item.title}</h3>
+                                      <div className="space-y-3">
+                                        <TextEditor
+                                          editable={false}
+                                          enableMenuBar={false}
+                                          onUpdate={() => {}}
+                                          content={item.description}
+                                          editorProps={{
+                                            attributes: {
+                                              class: "mt-3",
+                                            },
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
                                   )}
-                                  className="rounded"
                                 >
-                                  <div className="flex justify-between">
-                                    <h4>{item.title}</h4>
-                                    <DropdownMenu
-                                      text={<BsThreeDotsVertical />}
-                                      dropdownItems={[
-                                        {
-                                          text: "Edit",
-                                          onClick: (e) => {
-                                            try {
-                                              e.preventDefault();
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={getItemStyle(
+                                      snapshot.isDragging,
+                                      provided.draggableProps.style
+                                    )}
+                                    className="rounded"
+                                  >
+                                    <div className="flex justify-between">
+                                      <h4>{item.title}</h4>
+                                      <DropdownMenu
+                                        text={<BsThreeDotsVertical />}
+                                        dropdownItems={[
+                                          {
+                                            text: "Edit",
+                                            onClick: (e) => {
+                                              try {
+                                                e.preventDefault();
 
-                                              setTaskEdit(item);
-                                              setOpenTaskEdit(true);
-                                            } catch (e) {
-                                              console.log(e);
-                                            }
+                                                setTaskEdit(item);
+                                                setOpenTaskEdit(true);
+                                              } catch (e) {
+                                                console.log(e);
+                                              }
+                                            },
                                           },
-                                        },
-                                        {
-                                          text: "Delete",
-                                          onClick: async (e) => {
-                                            try {
-                                              e.preventDefault();
-                                              await deleteTaskById(
-                                                item.task_id
-                                              );
+                                          {
+                                            text: "Delete",
+                                            onClick: async (e) => {
+                                              try {
+                                                e.preventDefault();
+                                                await deleteTaskById(
+                                                  item.task_id
+                                                );
 
-                                              let newBoards =
-                                                await getAllBoards();
-                                              setBoards(newBoards);
-                                            } catch (e) {
-                                              console.log(e);
-                                            }
+                                                let newBoards =
+                                                  await getAllBoards();
+                                                setBoards(newBoards);
+                                              } catch (e) {
+                                                console.log(e);
+                                              }
+                                            },
                                           },
-                                        },
-                                      ]}
-                                    />
+                                        ]}
+                                      />
+                                    </div>
                                   </div>
-                                </div>
+                                </Tippy>
                               )}
                             </Draggable>
                           )
