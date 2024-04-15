@@ -25,6 +25,7 @@ import { createTask } from "@/invoker/createTask";
 import { deleteTaskById } from "@/invoker/deleteTaskById";
 import { editTask } from "@/invoker/editTask";
 import { Task } from "@/model/task";
+import { CiSquarePlus } from "react-icons/ci";
 
 const grid = 8;
 
@@ -229,8 +230,8 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
         <div className="flex flex-row">
           {boards &&
             boards?.map((board) => (
-              <div key={board.board_id} className="mx-2">
-                <div className="flex justify-between">
+              <div key={board.board_id} className="mx-2 rounded">
+                <div className="flex justify-between rounded">
                   <h4>{board.name}</h4>
                   <DropdownMenu
                     text={<BsThreeDotsVertical />}
@@ -277,6 +278,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                       style={getListStyle(snapshot.isDraggingOver)}
+                      className="rounded"
                     >
                       {board.tasks.map(
                         (item, index) =>
@@ -298,6 +300,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                                     snapshot.isDragging,
                                     provided.draggableProps.style
                                   )}
+                                  className="rounded"
                                 >
                                   <div className="flex justify-between">
                                     <h4>{item.title}</h4>
@@ -348,14 +351,14 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                 </Droppable>
                 <div className="flex justify-end">
                   <button
-                    className="m-4"
+                    className="my-4 bg-transparent hover:bg-gray-700 rounded"
                     onClick={(e) => {
                       e.preventDefault();
                       setBoardAddTask(board);
                       setOpenAddTask(true);
                     }}
                   >
-                    <h4>+</h4>
+                    <CiSquarePlus size={30} />
                   </button>
                 </div>
               </div>

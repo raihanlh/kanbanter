@@ -8,6 +8,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { CiSquarePlus } from "react-icons/ci";
 
 const KanbanBoard = dynamic(() => import("@/components/board/KanbanBoard"), {
   ssr: false,
@@ -35,13 +36,13 @@ const Home: NextPage = () => {
     <main>
       <header className="w-screen flex justify-end">
         <button
-          className="m-4"
+          className="m-4 bg-transparent hover:bg-gray-700 rounded"
           onClick={(e) => {
             e.preventDefault();
             setOpen(true);
           }}
         >
-          <h4>+</h4>
+          <CiSquarePlus size={36} />
         </button>
       </header>
       <CreateBoardDialog
