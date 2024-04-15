@@ -26,12 +26,8 @@ import { deleteTaskById } from "@/invoker/deleteTaskById";
 import { editTask } from "@/invoker/editTask";
 import { Task } from "@/model/task";
 import { CiSquarePlus } from "react-icons/ci";
-import Tippy from "@tippyjs/react/headless";
-import { Editor, generateHTML } from "@tiptap/react";
-import Bold from "@tiptap/extension-bold";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
+import Tippy from "@tippyjs/react";
+import 'tippy.js/dist/tippy.css'; // optional
 import TextEditor from "../textEditor/TextEditor";
 
 const grid = 8;
@@ -301,11 +297,10 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                                   interactive={true}
                                   placement="auto"
                                   arrow={true}
-                                  render={(attrs) => (
+                                  content={
                                     <div
-                                      className="rounded bg-gray-700 m-3 p-3 space-y-3"
+                                      className="rounded p-3 space-y-3"
                                       tabIndex={-1}
-                                      {...attrs}
                                     >
                                       <h3>{item.title}</h3>
                                       <div className="space-y-3">
@@ -322,7 +317,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                                         />
                                       </div>
                                     </div>
-                                  )}
+                                  }
                                 >
                                   <div
                                     ref={provided.innerRef}
