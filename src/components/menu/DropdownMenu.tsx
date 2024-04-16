@@ -1,10 +1,7 @@
 import { FC, Fragment, MouseEventHandler, ReactNode } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "@/lib/utils";
 
 interface DropdownItem {
   text?: string;
@@ -24,7 +21,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   dropdownItems,
   buttonColor = "white",
 }) => {
-  const buttonClass = `inline-flex w-full justify-center gap-x-1.5 rounded-md bg-transparent pl-3 px-1 py-2 text-sm font-semibold text-${buttonColor}-900 shadow-sm`
+  const buttonClass = `inline-flex w-full justify-center gap-x-1.5 rounded-md bg-transparent pl-3 px-1 py-2 text-sm font-semibold text-${buttonColor}-900 shadow-sm`;
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>

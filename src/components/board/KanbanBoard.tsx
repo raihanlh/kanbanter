@@ -12,7 +12,6 @@ import {
   OnDragEndResponder,
   DropResult,
 } from "@hello-pangea/dnd";
-import { invoke } from "@tauri-apps/api/tauri";
 import { Board } from "@/model/board";
 import { DropdownMenu } from "../menu/DropdownMenu";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -26,9 +25,9 @@ import { deleteTaskById } from "@/invoker/deleteTaskById";
 import { editTask } from "@/invoker/editTask";
 import { Task } from "@/model/task";
 import { CiSquarePlus } from "react-icons/ci";
-import Tippy from "@tippyjs/react";
-import 'tippy.js/dist/tippy.css'; // optional
 import TextEditor from "../textEditor/TextEditor";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 
 const grid = 8;
 
@@ -133,11 +132,8 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
       }
     }
 
-    await invoke<Board[]>("get_all_boards", {})
-      .then((result) => {
-        setBoards(result);
-      })
-      .catch(console.error);
+    let res = await getAllBoards();
+    setBoards(res);
   };
 
   return (
@@ -232,8 +228,14 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
           {boards &&
             boards?.map((board) => (
               <div key={board.board_id} className="mx-2 rounded">
-                <div className="flex justify-between rounded">
-                  <h4>{board.name}</h4>
+                <div className="flex justify-between rounded items-center mb-3 text-center">
+                  <TextEditor
+                    editable={false}
+                    enableMenuBar={false}
+                    onUpdate={() => {}}
+                    content={board.name}
+                    className="text-center mt-0"
+                  />
                   <DropdownMenu
                     text={<BsThreeDotsVertical />}
                     dropdownItems={[
@@ -302,7 +304,12 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                                       className="rounded p-3 space-y-3"
                                       tabIndex={-1}
                                     >
-                                      <h3>{item.title}</h3>
+                                      <TextEditor
+                                        editable={false}
+                                        enableMenuBar={false}
+                                        onUpdate={() => {}}
+                                        content={item.title}
+                                      />
                                       <div className="space-y-3">
                                         <TextEditor
                                           editable={false}
@@ -329,8 +336,14 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                                     )}
                                     className="rounded"
                                   >
-                                    <div className="flex justify-between">
-                                      <h4>{item.title}</h4>
+                                    <div className="flex justify-between items-center text-center">
+                                      <TextEditor
+                                        editable={false}
+                                        enableMenuBar={false}
+                                        onUpdate={() => {}}
+                                        content={item.title}
+                                        className="text-center"
+                                      />
                                       <DropdownMenu
                                         text={<BsThreeDotsVertical />}
                                         dropdownItems={[

@@ -51,6 +51,7 @@ export const CreateBoardDialog: FC<CreateBoardDialogProps> = ({
                 setName(editor?.getHTML().toString());
               }}
               content={name}
+              className="border border-sky-500 p-2"
             />
           </div>
           <TextEditor
@@ -63,6 +64,7 @@ export const CreateBoardDialog: FC<CreateBoardDialogProps> = ({
                 class: "mt-3",
               },
             }}
+            className="border border-sky-500 p-2"
           />
         </div>
       }

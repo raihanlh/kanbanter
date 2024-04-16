@@ -26,6 +26,7 @@ import { GrBlockQuote } from "react-icons/gr";
 import { VscHorizontalRule } from "react-icons/vsc";
 import { Transaction } from "@tiptap/pm/state";
 import { EditorProps } from "@tiptap/pm/view";
+import { classNames } from "@/lib/utils";
 
 const MenuBar = () => {
   const { editor } = useCurrentEditor();
@@ -187,6 +188,7 @@ export interface TextEditorProps {
   enableMenuBar?: boolean;
   editorProps?: EditorProps<any>;
   editable?: boolean;
+  className?: string;
 }
 
 export const TextEditor: FC<TextEditorProps> = ({
@@ -195,16 +197,22 @@ export const TextEditor: FC<TextEditorProps> = ({
   enableMenuBar = true,
   editorProps,
   editable = true,
+  className = "",
 }) => {
+  const classes = classNames(
+    editable ? "border border-sky-500 p-2" : "",
+    "divide-y divide-dashed md:divide-solid rounded items-center",
+    className
+  );
   return (
-    <div className="divide-y divide-dashed md:divide-solid space-y-3 border border-sky-500 rounded p-2">
+    <div className={classes}>
       <EditorProvider
         editable={editable}
         slotBefore={enableMenuBar ? <MenuBar /> : null}
         extensions={extensions}
         content={content}
         onUpdate={onUpdate}
-        editorProps={editorProps}
+        editorProps={{ ...editorProps }}
       >
         <></>
       </EditorProvider>

@@ -52,6 +52,7 @@ export const CreateTaskDialog: FC<CreateTaskDialogProps> = ({
                 setName(editor?.getText().toString());
               }}
               content={name}
+              className="border border-sky-500 p-2"
             />
           </div>
           <TextEditor
@@ -64,6 +65,7 @@ export const CreateTaskDialog: FC<CreateTaskDialogProps> = ({
                 class: "mt-3",
               },
             }}
+            className="border border-sky-500 p-2"
           />
         </div>
       }
