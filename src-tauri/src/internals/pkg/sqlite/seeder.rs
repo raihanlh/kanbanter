@@ -58,8 +58,8 @@ impl Seeder<Board> for BoardSeeder {
         let new_boards = vec![
             Board {
                 board_id: 0,
-                name: "Testing Board 1".to_string(),
-                description: "desc test".to_string(),
+                name: "Backlog".to_string(),
+                description: "Backlog".to_string(),
                 position: 0,
                 tasks: vec![],
                 created_at: chrono::Local::now(),
@@ -68,8 +68,48 @@ impl Seeder<Board> for BoardSeeder {
             },
             Board {
                 board_id: 0,
-                name: "Testing Board 2".to_string(),
-                description: "desc test 2".to_string(),
+                name: "To Do".to_string(),
+                description: "To Do".to_string(),
+                position: 0,
+                tasks: vec![],
+                created_at: chrono::Local::now(),
+                updated_at: chrono::Local::now(),
+                deleted_at: Option::None,
+            },
+            Board {
+                board_id: 0,
+                name: "In Progress".to_string(),
+                description: "To Do".to_string(),
+                position: 0,
+                tasks: vec![],
+                created_at: chrono::Local::now(),
+                updated_at: chrono::Local::now(),
+                deleted_at: Option::None,
+            },
+            Board {
+                board_id: 0,
+                name: "In Review".to_string(),
+                description: "To Do".to_string(),
+                position: 0,
+                tasks: vec![],
+                created_at: chrono::Local::now(),
+                updated_at: chrono::Local::now(),
+                deleted_at: Option::None,
+            },
+            Board {
+                board_id: 0,
+                name: "In Testing".to_string(),
+                description: "To Do".to_string(),
+                position: 0,
+                tasks: vec![],
+                created_at: chrono::Local::now(),
+                updated_at: chrono::Local::now(),
+                deleted_at: Option::None,
+            },
+            Board {
+                board_id: 0,
+                name: "Done".to_string(),
+                description: "To Do".to_string(),
                 position: 0,
                 tasks: vec![],
                 created_at: chrono::Local::now(),
@@ -135,7 +175,7 @@ impl Seeder<Task> for TaskSeeder {
                     Task {
                         task_id: 0,
                         board_id: board_id.clone(),
-                        title: format!("Testing Task 1 - {}", board_id).to_string(),
+                        title: format!("Task 1").to_string(),
                         description: "desc test".to_string(),
                         position: 0,
                         created_at: chrono::Local::now(),
@@ -145,7 +185,7 @@ impl Seeder<Task> for TaskSeeder {
                     Task {
                         task_id: 0,
                         board_id: board_id.clone(),
-                        title: format!("Testing Task 2 - {}", board_id).to_string(),
+                        title: format!("Task 2").to_string(),
                         description: "desc test 2".to_string(),
                         position: 0,
                         created_at: chrono::Local::now(),
@@ -175,6 +215,7 @@ impl Seeder<Task> for TaskSeeder {
                     let _task = self.task_repo.get_by_id(res.task_id).await;
                     tasks_res.push(res);
                 }
+                break;
             }
             self.generated_tasks = tasks_res.clone();
         }
