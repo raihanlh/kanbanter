@@ -6,7 +6,7 @@
     "distDir": "../out"
   },
   "package": {
-    "productName": "tauri-app-server",
+    "productName": "kanbanter-server",
     "version": "0.1.0"
   },
   "tauri": {
@@ -96,7 +96,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "Kanban-T",
+        "title": "Kanbanter",
         "width": 800,
         "maximized": true
       }
