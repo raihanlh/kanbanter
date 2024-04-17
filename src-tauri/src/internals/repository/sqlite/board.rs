@@ -23,12 +23,6 @@ impl BoardRepositoryImpl {
     }
 }
 
-// impl BoardRepositoryImpl {
-//     pub fn new(db: Pool<Sqlite>) -> Self {
-//         BoardRepositoryImpl { db }
-//     }
-// }
-
 #[async_trait]
 impl BoardRepository for BoardRepositoryImpl {
     async fn insert(&self, board: Board) -> Box<Board> {
@@ -54,4 +48,6 @@ impl BoardRepository for BoardRepositoryImpl {
     async fn delete(&self, id: i64) -> bool {
         delete(&self.db, id).await
     }
+
+    
 }

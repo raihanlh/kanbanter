@@ -11,4 +11,5 @@ pub trait TaskUsecase {
     async fn update_task_by_id(&self, task: Task) -> Box<Task>;
     async fn get_highest_task_position(&self, id: i64) ->  i32;
     async fn delete_task_by_id(&self, id: i64) ->  bool;
+    async fn archive_task_by_id(&self, id: i64) ->  bool;
 }

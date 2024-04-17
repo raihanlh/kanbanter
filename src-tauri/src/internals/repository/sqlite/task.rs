@@ -8,7 +8,7 @@ use crate::internals::model::task::Task;
 use super::{
     repository::TaskRepository,
     task_impl::{
-        delete::delete, get_all::get_all, get_by_board_id::get_by_board_id, get_by_id::get_by_id, get_highest_task_position::get_highest_task_position, insert::insert, update::update
+        archive::archive, delete::delete, get_all::get_all, get_by_board_id::get_by_board_id, get_by_id::get_by_id, get_highest_task_position::get_highest_task_position, insert::insert, update::update
     },
 };
 
@@ -51,5 +51,9 @@ impl TaskRepository for TaskRepositoryImpl {
 
     async fn get_by_board_id(&self, board_id: i64) -> Vec<Box<Task>> {
         get_by_board_id(&self.db, board_id).await
+    }
+
+    async fn archive(&self, id: i64) -> bool {
+        archive(&self.db, id).await
     }
 }

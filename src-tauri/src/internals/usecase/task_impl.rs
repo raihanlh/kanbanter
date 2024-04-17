@@ -42,4 +42,7 @@ impl TaskUsecase for TaskUsecaseImpl {
     async fn delete_task_by_id(&self, id: i64) -> bool {
       self.repo.delete(id).await
     }
+    async fn archive_task_by_id(&self, id: i64) ->  bool{
+      self.repo.archive(id).await
+    }
 }
