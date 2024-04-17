@@ -9,8 +9,10 @@ pub const UPDATE_BOARD_QUERY: &str =
     "UPDATE boards SET name = ?, description = ?, updated_at = ?, position = ? WHERE board_id = ? AND deleted_at IS NULL";
 pub const GET_HIGHEST_BOARD_POSITION: &str =
     "SELECT MAX(position) AS max_position FROM boards WHERE deleted_at IS NULL ORDER BY position DESC LIMIT 1";
-pub const DELETE_BOARD_BY_BOARD_ID: &str =
+pub const ARCHIVE_BOARD_BY_BOARD_ID: &str =
     "UPDATE boards SET deleted_at = CURRENT_TIMESTAMP WHERE board_id = ?";
+pub const DELETE_BOARD_BY_BOARD_ID: &str =
+    "DELETE FROM boards WHERE board_id = ?";
 
 // Tasks
 pub const INSERT_TASK_QUERY: &str = 
@@ -25,7 +27,11 @@ pub const UPDATE_TASK_QUERY: &str =
     "UPDATE tasks SET title = ?, description = ?, board_id = ?, position = ?, updated_at = ? WHERE task_id = ? and  deleted_at IS NULL";
 pub const GET_HIGHEST_TASK_POSITION: &str =
     "SELECT MAX(position) AS max_position FROM tasks WHERE board_id = ? AND deleted_at IS NULL";
-pub const DELETE_TASK_BY_TASK_ID: &str =
+pub const ARCHIVE_TASK_BY_TASK_ID: &str =
     "UPDATE tasks SET deleted_at = CURRENT_TIMESTAMP WHERE task_id = ?";
-pub const DELETE_TASK_BY_BOARD_ID: &str =
+pub const ARCHIVE_TASK_BY_BOARD_ID: &str =
     "UPDATE tasks SET deleted_at = CURRENT_TIMESTAMP WHERE board_id = ?";
+pub const DELETE_TASK_BY_TASK_ID: &str =
+    "DELETE FROM tasks WHERE task_id = ?";
+pub const DELETE_TASK_BY_BOARD_ID: &str =
+    "DELETE FROM tasks WHERE board_id = ?";
