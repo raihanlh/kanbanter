@@ -10,4 +10,5 @@ pub trait BoardUsecase {
     async fn update_board_by_id(&self, board: Board) -> Box<Board>;
     async fn get_highest_board_position(&self) ->  i32;
     async fn delete_board_by_id(&self, id: i64) ->  bool;
+    async fn archive_board_by_id(&self, id: i64) ->  bool;
 }

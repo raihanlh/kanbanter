@@ -57,4 +57,8 @@ impl BoardUsecase for BoardUsecaseImpl {
     async fn delete_board_by_id(&self, id: i64) -> bool {
         self.repo.delete(id).await
     }
+
+    async fn archive_board_by_id(&self, id: i64) ->  bool {
+        self.repo.archive(id).await
+    }
 }

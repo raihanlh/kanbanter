@@ -19,6 +19,7 @@ pub async fn init() {
             create_new_board,
             update_board,
             delete_board,
+            archive_board,
             create_new_task,
             update_task,
             delete_task_by_id,
@@ -66,6 +67,18 @@ pub async fn delete_board(id: i64) -> Result<bool> {
     let board_uc = BoardUsecaseImpl::new(board_repo.clone(), task_repo.clone());
 
     Ok(board_uc.delete_board_by_id(id).await)
+}
+
+#[command]
+pub async fn archive_board(id: i64) -> Result<bool> {
+    let db_url = env::var("DB_URL").unwrap();
+
+    let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    let task_repo = TaskRepositoryImpl::new(db.clone()).await;
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let board_uc = BoardUsecaseImpl::new(board_repo.clone(), task_repo.clone());
+
+    Ok(board_uc.archive_board_by_id(id).await)
 }
 
 #[command]

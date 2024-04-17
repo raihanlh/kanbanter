@@ -5,8 +5,7 @@ use sqlx::{Pool, Sqlite};
 
 use super::{
     board_impl::{
-        delete::delete, get_all::get_all, get_by_id::get_by_id,
-        get_highest_board_position::get_highest_board_position, insert::insert, update::update,
+        archive::archive, delete::delete, get_all::get_all, get_by_id::get_by_id, get_highest_board_position::get_highest_board_position, insert::insert, update::update
     },
     repository::BoardRepository,
 };
@@ -49,5 +48,8 @@ impl BoardRepository for BoardRepositoryImpl {
         delete(&self.db, id).await
     }
 
-    
+    async fn archive(&self, id: i64) -> bool {
+        archive(&self.db, id).await
+    }
+
 }
