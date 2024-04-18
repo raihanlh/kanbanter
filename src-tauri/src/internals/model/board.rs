@@ -13,3 +13,7 @@ pub struct Board {
     pub updated_at: chrono::DateTime<chrono::Local>,
     pub deleted_at: Option<chrono::DateTime<chrono::Local>>,
 }
+
+pub struct GetAllBoardFilter {
+    pub is_archived: bool,
+}
