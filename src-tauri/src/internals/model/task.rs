@@ -12,6 +12,6 @@ pub struct Task {
     pub deleted_at: Option<chrono::DateTime<chrono::Local>>,
 }
 
-pub struct GetAllTaskFilter {
+pub struct GetTaskFilter {
     pub is_archived: bool,
 }

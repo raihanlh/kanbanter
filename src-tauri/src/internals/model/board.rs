@@ -14,6 +14,7 @@ pub struct Board {
     pub deleted_at: Option<chrono::DateTime<chrono::Local>>,
 }
 
+#[derive(Serialize, Deserialize, Default, Clone, Copy)]
 pub struct GetAllBoardFilter {
     pub is_archived: bool,
 }

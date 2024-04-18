@@ -3,7 +3,10 @@ use std::sync::Arc;
 use async_trait::async_trait;
 
 use crate::internals::{
-    model::board::Board,
+    model::{
+        board::{Board, GetAllBoardFilter},
+        task::GetTaskFilter,
+    },
     repository::sqlite::repository::{BoardRepository, TaskRepository},
 };
 
@@ -36,16 +39,25 @@ impl BoardUsecase for BoardUsecaseImpl {
         self.repo.get_by_id(id).await
     }
 
-    async fn get_all_boards(&self) -> Vec<Box<Board>> {
-        let mut boards = self.repo.get_all().await;
+    async fn get_all_boards(&self, filter: GetAllBoardFilter) -> Vec<Box<Board>> {
+        let mut boards = self.repo.get_all(filter).await;
 
         for (idx, board) in boards.clone().iter().enumerate() {
-            let tasks = self.repo_task.get_by_board_id(board.board_id).await;
+            let tasks = self
+                .repo_task
+                .get_by_board_id(
+                    board.board_id,
+                    GetTaskFilter {
+                        is_archived: filter.clone().is_archived,
+                    },
+                )
+                .await;
             boards[idx].tasks = tasks.clone();
         }
 
         boards
     }
+
     async fn update_board_by_id(&self, board: Board) -> Box<Board> {
         self.repo.update(board).await
     }
@@ -58,7 +70,7 @@ impl BoardUsecase for BoardUsecaseImpl {
         self.repo.delete(id).await
     }
 
-    async fn archive_board_by_id(&self, id: i64) ->  bool {
+    async fn archive_board_by_id(&self, id: i64) -> bool {
         self.repo.archive(id).await
     }
 }

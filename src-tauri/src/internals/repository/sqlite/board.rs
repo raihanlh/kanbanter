@@ -9,7 +9,7 @@ use super::{
     },
     repository::BoardRepository,
 };
-use crate::internals::model::board::Board;
+use crate::internals::model::board::{Board, GetAllBoardFilter};
 
 #[derive(Clone)]
 pub struct BoardRepositoryImpl {
@@ -32,8 +32,8 @@ impl BoardRepository for BoardRepositoryImpl {
         get_by_id(&self.db, id).await
     }
 
-    async fn get_all(&self) -> Vec<Box<Board>> {
-        get_all(&self.db).await
+    async fn get_all(&self, filter: GetAllBoardFilter) -> Vec<Box<Board>> {
+        get_all(&self.db, filter).await
     }
 
     async fn update(&self, board: Board) -> Box<Board> {

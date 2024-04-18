@@ -4,7 +4,7 @@ use sqlx::SqlitePool;
 use tauri::{command, Result};
 
 use crate::internals::{
-    model::{board::Board, task::Task},
+    model::{board::{Board, GetAllBoardFilter}, task::Task},
     repository::sqlite::{board::BoardRepositoryImpl, task::TaskRepositoryImpl},
     usecase::{
         board::BoardUsecase, board_impl::BoardUsecaseImpl, task::TaskUsecase,
@@ -82,7 +82,7 @@ pub async fn archive_board(id: i64) -> Result<bool> {
 }
 
 #[command]
-pub async fn get_all_boards() -> Result<Vec<Box<Board>>> {
+pub async fn get_all_boards(filter: GetAllBoardFilter) -> Result<Vec<Box<Board>>> {
     let db_url = env::var("DB_URL").unwrap();
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
@@ -90,7 +90,7 @@ pub async fn get_all_boards() -> Result<Vec<Box<Board>>> {
     let board_repo = BoardRepositoryImpl::new(db.clone()).await;
     let board_uc = BoardUsecaseImpl::new(board_repo.clone(), task_repo.clone());
 
-    Ok(board_uc.get_all_boards().await)
+    Ok(board_uc.get_all_boards(filter).await)
 }
 
 // Task Handler

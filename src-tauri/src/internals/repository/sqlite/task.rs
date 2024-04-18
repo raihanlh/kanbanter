@@ -3,7 +3,7 @@ use std::sync::Arc;
 use async_trait::async_trait;
 use sqlx::{Pool, Sqlite};
 
-use crate::internals::model::task::Task;
+use crate::internals::model::task::{GetTaskFilter, Task};
 
 use super::{
     repository::TaskRepository,
@@ -49,8 +49,8 @@ impl TaskRepository for TaskRepositoryImpl {
         delete(&self.db, id).await
     }
 
-    async fn get_by_board_id(&self, board_id: i64) -> Vec<Box<Task>> {
-        get_by_board_id(&self.db, board_id).await
+    async fn get_by_board_id(&self, board_id: i64, filter: GetTaskFilter) -> Vec<Box<Task>> {
+        get_by_board_id(&self.db, board_id, filter).await
     }
 
     async fn archive(&self, id: i64) -> bool {

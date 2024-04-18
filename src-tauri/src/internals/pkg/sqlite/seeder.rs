@@ -4,7 +4,10 @@ use async_trait::async_trait;
 use sqlx::SqlitePool;
 
 use crate::internals::{
-    model::{board::Board, task::Task},
+    model::{
+        board::{Board, GetAllBoardFilter},
+        task::{GetTaskFilter, Task},
+    },
     repository::sqlite::{
         board::BoardRepositoryImpl,
         repository::{BoardRepository, TaskRepository},
@@ -17,7 +20,9 @@ pub async fn seed(db_url: String) {
     let board_repo = BoardRepositoryImpl::new(db.clone()).await;
     let task_repo = TaskRepositoryImpl::new(db.clone()).await;
 
-    let boards = board_repo.get_all().await;
+    let boards = board_repo
+        .get_all(GetAllBoardFilter { is_archived: false })
+        .await;
     if boards.len() == 0 {
         let mut board_seeder = BoardSeeder::new(board_repo).await;
         board_seeder.seed().await;
