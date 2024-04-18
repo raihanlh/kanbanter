@@ -22,7 +22,7 @@ pub const GET_TASK_BY_ID_QUERY: &str =
 pub const GET_ALL_TASK_QUERY: &str = 
     "SELECT task_id, board_id, title, description, created_at, updated_at, position FROM tasks WHERE deleted_at IS NULL";
 pub const GET_TASKS_BY_BOARD_ID_QUERY: &str = 
-    "SELECT task_id, board_id, title, description, created_at, updated_at, position FROM tasks WHERE board_id = ? AND deleted_at IS NULL ORDER BY position ASC";
+    "SELECT task_id, board_id, title, description, created_at, updated_at, position FROM tasks WHERE board_id = ?";
 pub const UPDATE_TASK_QUERY: &str = 
     "UPDATE tasks SET title = ?, description = ?, board_id = ?, position = ?, updated_at = ? WHERE task_id = ? and  deleted_at IS NULL";
 pub const GET_HIGHEST_TASK_POSITION: &str =
