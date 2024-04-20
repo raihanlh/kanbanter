@@ -36,7 +36,7 @@ const Home: NextPage = () => {
     <main>
       <header className="w-screen flex justify-end">
         <button
-          className="m-4 bg-transparent hover:bg-gray-700 rounded"
+          className="m-4 bg-transparent hover:bg-gray-700 rounded absolute top-0 right-0"
           onClick={(e) => {
             e.preventDefault();
             setOpen(true);
