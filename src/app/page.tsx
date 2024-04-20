@@ -4,10 +4,10 @@ import { createBoard } from "@/invoker/createBoard";
 import { getAllBoards } from "@/invoker/getAllBoards";
 import { Board } from "@/model/board";
 import { CreateBoardDialogProps } from "@/module/dialog/CreateBoardDialog";
-import { NextPage } from "next";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { CiSquarePlus } from "react-icons/ci";
+import { NextPage } from "next";
 
 const KanbanBoard = dynamic(() => import("@/components/board/KanbanBoard"), {
   ssr: false,

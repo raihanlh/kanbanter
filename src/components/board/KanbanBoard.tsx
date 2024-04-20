@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -138,7 +138,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
   };
 
   return (
-    <div>
+    <div className="container mx-auto overflow-auto">
       {boardEdit && (
         <CreateBoardDialog
           title="Edit swimlane"
@@ -282,7 +282,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                       style={getListStyle(snapshot.isDraggingOver)}
-                      className="rounded"
+                      className="rounded max-h-[75vh] overflow-auto"
                     >
                       {board.tasks.map(
                         (item, index) =>
