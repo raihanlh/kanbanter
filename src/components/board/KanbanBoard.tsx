@@ -28,6 +28,7 @@ import { CiSquarePlus } from "react-icons/ci";
 import TextEditor from "../textEditor/TextEditor";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
+import { archiveTaskById } from "@/invoker/archiveTaskById";
 
 const grid = 8;
 
@@ -355,6 +356,23 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ boards, setBoards }) => {
 
                                                 setTaskEdit(item);
                                                 setOpenTaskEdit(true);
+                                              } catch (e) {
+                                                console.log(e);
+                                              }
+                                            },
+                                          },
+                                          {
+                                            text: "Archive",
+                                            onClick: async (e) => {
+                                              try {
+                                                e.preventDefault();
+                                                await archiveTaskById(
+                                                  item.task_id
+                                                );
+
+                                                let newBoards =
+                                                  await getAllBoards();
+                                                setBoards(newBoards);
                                               } catch (e) {
                                                 console.log(e);
                                               }
