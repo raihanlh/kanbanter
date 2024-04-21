@@ -6,7 +6,7 @@ use sqlx::SqlitePool;
 use crate::internals::{
     model::{
         board::{Board, GetAllBoardFilter},
-        task::{GetTaskFilter, Task},
+        task::Task,
     },
     repository::sqlite::{
         board::BoardRepositoryImpl,

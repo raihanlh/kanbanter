@@ -4,7 +4,7 @@ pub const INSERT_BOARD_QUERY: &str =
 pub const GET_BOARD_BY_ID_QUERY: &str = 
     "SELECT board_id, name, description, created_at, updated_at, position FROM boards WHERE board_id = ? AND deleted_at IS NULL";
 pub const GET_ALL_BOARD_QUERY: &str = 
-    "SELECT board_id, name, description, created_at, updated_at, position FROM boards WHERE deleted_at IS NULL ORDER BY position ASC";
+    "SELECT board_id, name, description, created_at, updated_at, position FROM boards";
 pub const UPDATE_BOARD_QUERY: &str = 
     "UPDATE boards SET name = ?, description = ?, updated_at = ?, position = ? WHERE board_id = ? AND deleted_at IS NULL";
 pub const GET_HIGHEST_BOARD_POSITION: &str =
@@ -20,7 +20,7 @@ pub const INSERT_TASK_QUERY: &str =
 pub const GET_TASK_BY_ID_QUERY: &str = 
     "SELECT task_id, board_id, title, description, created_at, updated_at, position FROM tasks WHERE task_id = ? AND deleted_at IS NULL";
 pub const GET_ALL_TASK_QUERY: &str = 
-    "SELECT task_id, board_id, title, description, created_at, updated_at, position FROM tasks WHERE deleted_at IS NULL";
+    "SELECT task_id, board_id, title, description, created_at, updated_at, position FROM tasks";
 pub const GET_TASKS_BY_BOARD_ID_QUERY: &str = 
     "SELECT task_id, board_id, title, description, created_at, updated_at, position FROM tasks WHERE board_id = ?";
 pub const UPDATE_TASK_QUERY: &str = 

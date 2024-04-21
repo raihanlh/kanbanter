@@ -4,7 +4,7 @@ use sqlx::SqlitePool;
 use tauri::{command, Result};
 
 use crate::internals::{
-    model::{board::{Board, GetAllBoardFilter}, task::Task},
+    model::{board::{Board, GetAllBoardFilter}, task::{GetTaskFilter, Task}},
     repository::sqlite::{board::BoardRepositoryImpl, task::TaskRepositoryImpl},
     usecase::{
         board::BoardUsecase, board_impl::BoardUsecaseImpl, task::TaskUsecase,
@@ -157,4 +157,15 @@ pub async fn get_task_by_id(id: i64) -> Result<Box<Task>> {
     let task_uc = TaskUsecaseImpl::new(task_repo.clone());
 
     Ok(task_uc.get_task_by_id(id).await)
+}
+
+#[command]
+pub async fn get_all_tasks(filter: GetTaskFilter) -> Result<Vec<Box<Task>>> {
+    let db_url = env::var("DB_URL").unwrap();
+
+    let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    let task_repo = TaskRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+
+    Ok(task_uc.get_all_tasks(filter).await)
 }

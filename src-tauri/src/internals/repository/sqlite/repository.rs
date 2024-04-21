@@ -21,7 +21,7 @@ pub trait BoardRepository {
 pub trait TaskRepository {
     async fn insert(&self, task: Task) -> Box<Task>;
     async fn get_by_id(&self, id: i64) -> Box<Task>;
-    async fn get_all(&self) -> Vec<Box<Task>>;
+    async fn get_all(&self, filter: GetTaskFilter) -> Vec<Box<Task>>;
     async fn get_highest_task_position(&self, board_id: i64) -> i32;
     async fn update(&self, task: Task) -> Box<Task>;
     async fn delete(&self, id: i64) -> bool;

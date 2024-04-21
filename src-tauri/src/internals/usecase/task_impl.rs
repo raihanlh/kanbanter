@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use async_trait::async_trait;
 
-use crate::internals::{model::task::Task, repository::sqlite::repository::TaskRepository};
+use crate::internals::{model::task::{GetTaskFilter, Task}, repository::sqlite::repository::TaskRepository};
 
 use super::task::TaskUsecase;
 
@@ -27,12 +27,9 @@ impl TaskUsecase for TaskUsecaseImpl {
     async fn get_task_by_id(&self, id: i64) -> Box<Task> {
       self.repo.get_by_id(id).await
     }
-    async fn get_all_tasks(&self) -> Vec<Box<Task>> {
-      self.repo.get_all().await
+    async fn get_all_tasks(&self, filter: GetTaskFilter) -> Vec<Box<Task>> {
+      self.repo.get_all(filter).await
     }
-    // async fn get_all_tasks_by_board_id(&self, board_id: i64) -> Vec<Box<Task>> {
-    //   self.repo.get_all_by_board_id(board_id)
-    // }
     async fn update_task_by_id(&self, task: Task) -> Box<Task> {
       self.repo.update(task).await
     }
@@ -42,7 +39,10 @@ impl TaskUsecase for TaskUsecaseImpl {
     async fn delete_task_by_id(&self, id: i64) -> bool {
       self.repo.delete(id).await
     }
-    async fn archive_task_by_id(&self, id: i64) ->  bool{
+    async fn archive_task_by_id(&self, id: i64) ->  bool {
       self.repo.archive(id).await
+    }
+    async fn get_by_board_id(&self, board_id: i64, filter: GetTaskFilter) -> Vec<Box<Task>> {
+      self.repo.get_by_board_id(board_id, filter).await
     }
 }
