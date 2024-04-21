@@ -1,4 +1,4 @@
-import { Board } from "@/model/board";
+import { Task } from "@/model/task";
 import { invoke } from "@tauri-apps/api/tauri";
 
 export interface GetAllTasksFilter {
@@ -13,7 +13,7 @@ export const getAllTasks = async (filter?: GetAllTasksFilter) => {
   }
 
   try {
-    let res = await invoke<Board[]>("get_all_tasks", {
+    let res = await invoke<Task[]>("get_all_tasks", {
       filter,
     });
     return res;
