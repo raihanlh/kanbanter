@@ -4,7 +4,10 @@ use sqlx::SqlitePool;
 use tauri::{command, Result};
 
 use crate::internals::{
-    model::{board::{Board, GetAllBoardFilter}, task::{GetTaskFilter, Task}},
+    model::{
+        board::{Board, GetAllBoardFilter},
+        task::{GetTaskFilter, Task},
+    },
     repository::sqlite::{board::BoardRepositoryImpl, task::TaskRepositoryImpl},
     usecase::{
         board::BoardUsecase, board_impl::BoardUsecaseImpl, task::TaskUsecase,
@@ -20,6 +23,7 @@ pub async fn init() {
             update_board,
             delete_board,
             archive_board,
+            get_all_tasks,
             create_new_task,
             update_task,
             delete_task_by_id,

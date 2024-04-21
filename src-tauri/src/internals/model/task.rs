@@ -12,6 +12,8 @@ pub struct Task {
     pub deleted_at: Option<chrono::DateTime<chrono::Local>>,
 }
 
+
+#[derive(Serialize, Deserialize, Default, Clone, Copy)]
 pub struct GetTaskFilter {
     pub is_archived: bool,
 }
