@@ -27,4 +27,5 @@ pub trait TaskRepository {
     async fn delete(&self, id: i64) -> bool;
     async fn get_by_board_id(&self, board_id: i64, filter: GetTaskFilter) -> Vec<Box<Task>>;
     async fn archive(&self, id: i64) -> bool;
+    async fn unarchive(&self, id: i64) -> bool;
 }

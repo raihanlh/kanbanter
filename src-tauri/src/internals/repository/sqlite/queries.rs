@@ -35,3 +35,5 @@ pub const DELETE_TASK_BY_TASK_ID: &str =
     "DELETE FROM tasks WHERE task_id = ?";
 pub const DELETE_TASK_BY_BOARD_ID: &str =
     "DELETE FROM tasks WHERE board_id = ?";
+pub const UNARCHIVE_TASK_BY_TASK_ID: &str =
+    "UPDATE tasks SET deleted_at = NULL WHERE task_id = ?";

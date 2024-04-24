@@ -8,7 +8,7 @@ use crate::internals::model::task::{GetTaskFilter, Task};
 use super::{
     repository::TaskRepository,
     task_impl::{
-        archive::archive, delete::delete, get_all::get_all, get_by_board_id::get_by_board_id, get_by_id::get_by_id, get_highest_task_position::get_highest_task_position, insert::insert, update::update
+        archive::archive, delete::delete, get_all::get_all, get_by_board_id::get_by_board_id, get_by_id::get_by_id, get_highest_task_position::get_highest_task_position, insert::insert, unarchive::unarchive, update::update
     },
 };
 
@@ -55,5 +55,9 @@ impl TaskRepository for TaskRepositoryImpl {
 
     async fn archive(&self, id: i64) -> bool {
         archive(&self.db, id).await
+    }
+
+    async fn unarchive(&self, id: i64) -> bool {
+        unarchive(&self.db, id).await
     }
 }
