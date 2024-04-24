@@ -27,7 +27,8 @@ pub async fn init() {
             create_new_task,
             update_task,
             delete_task_by_id,
-            archive_task_by_id
+            archive_task_by_id,
+            unarchive_task_by_id
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -150,6 +151,17 @@ pub async fn archive_task_by_id(id: i64) -> Result<bool> {
     let task_uc = TaskUsecaseImpl::new(task_repo.clone());
 
     Ok(task_uc.archive_task_by_id(id).await)
+}
+
+#[command]
+pub async fn unarchive_task_by_id(id: i64) -> Result<bool> {
+    let db_url = env::var("DB_URL").unwrap();
+
+    let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
+    let task_repo = TaskRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+
+    Ok(task_uc.unarchive_task_by_id(id).await)
 }
 
 #[command]

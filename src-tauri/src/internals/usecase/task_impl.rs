@@ -45,4 +45,7 @@ impl TaskUsecase for TaskUsecaseImpl {
     async fn get_by_board_id(&self, board_id: i64, filter: GetTaskFilter) -> Vec<Box<Task>> {
       self.repo.get_by_board_id(board_id, filter).await
     }
+    async fn unarchive_task_by_id(&self, id: i64) ->  bool {
+      self.repo.unarchive(id).await
+    }
 }
