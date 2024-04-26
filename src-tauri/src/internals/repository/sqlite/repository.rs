@@ -15,6 +15,7 @@ pub trait BoardRepository {
     async fn get_highest_board_position(&self) -> i32;
     async fn delete(&self, id: i64) -> bool;
     async fn archive(&self, id: i64) -> bool;
+    async fn get_lowest_board_position(&self) -> i32;
 }
 
 #[async_trait]

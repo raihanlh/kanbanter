@@ -13,6 +13,8 @@ pub const ARCHIVE_BOARD_BY_BOARD_ID: &str =
     "UPDATE boards SET deleted_at = CURRENT_TIMESTAMP WHERE board_id = ?";
 pub const DELETE_BOARD_BY_BOARD_ID: &str =
     "DELETE FROM boards WHERE board_id = ?";
+pub const GET_LOWEST_BOARD_POSITION: &str =
+    "SELECT MIN(position) AS min_position FROM boards WHERE deleted_at IS NULL ORDER BY position ASC LIMIT 1";
 
 // Tasks
 pub const INSERT_TASK_QUERY: &str = 
