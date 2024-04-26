@@ -54,7 +54,8 @@ impl BoardRepository for BoardRepositoryImpl {
         archive(&self.db, id).await
     }
 
-    async fn get_lowest_board_position(&self) -> i32 {
+    // Result: (lowest_board_id: i32, board_id: i64)
+    async fn get_lowest_board_position(&self) -> (i32, i64) {
         get_lowest_board_position(&self.db).await
     }
 }

@@ -57,7 +57,7 @@ impl TaskRepository for TaskRepositoryImpl {
         archive(&self.db, id).await
     }
 
-    async fn unarchive(&self, id: i64) -> bool {
-        unarchive(&self.db, id).await
+    async fn unarchive(&self, id: i64, destination_board_id: i64) -> bool {
+        unarchive(&self.db, id, destination_board_id).await
     }
 }

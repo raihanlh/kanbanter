@@ -115,7 +115,8 @@ pub async fn create_new_task(
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
     let task_repo = TaskRepositoryImpl::new(db.clone()).await;
-    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone(), board_repo.clone());
 
     Ok(task_uc.create_new_task(task).await)
 }
@@ -126,7 +127,8 @@ pub async fn update_task(task: Task) -> Result<Box<Task>> {
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
     let task_repo = TaskRepositoryImpl::new(db.clone()).await;
-    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone(), board_repo.clone());
 
     Ok(task_uc.update_task_by_id(task).await)
 }
@@ -137,7 +139,8 @@ pub async fn delete_task_by_id(id: i64) -> Result<bool> {
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
     let task_repo = TaskRepositoryImpl::new(db.clone()).await;
-    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone(), board_repo.clone());
 
     Ok(task_uc.delete_task_by_id(id).await)
 }
@@ -148,7 +151,8 @@ pub async fn archive_task_by_id(id: i64) -> Result<bool> {
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
     let task_repo = TaskRepositoryImpl::new(db.clone()).await;
-    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone(), board_repo.clone());
 
     Ok(task_uc.archive_task_by_id(id).await)
 }
@@ -159,7 +163,8 @@ pub async fn unarchive_task_by_id(id: i64) -> Result<bool> {
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
     let task_repo = TaskRepositoryImpl::new(db.clone()).await;
-    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone(), board_repo.clone());
 
     Ok(task_uc.unarchive_task_by_id(id).await)
 }
@@ -170,7 +175,8 @@ pub async fn get_task_by_id(id: i64) -> Result<Box<Task>> {
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
     let task_repo = TaskRepositoryImpl::new(db.clone()).await;
-    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone(), board_repo.clone());
 
     Ok(task_uc.get_task_by_id(id).await)
 }
@@ -181,7 +187,8 @@ pub async fn get_all_tasks(filter: GetTaskFilter) -> Result<Vec<Box<Task>>> {
 
     let db = SqlitePool::connect(db_url.as_str()).await.unwrap();
     let task_repo = TaskRepositoryImpl::new(db.clone()).await;
-    let task_uc = TaskUsecaseImpl::new(task_repo.clone());
+    let board_repo = BoardRepositoryImpl::new(db.clone()).await;
+    let task_uc = TaskUsecaseImpl::new(task_repo.clone(), board_repo.clone());
 
     Ok(task_uc.get_all_tasks(filter).await)
 }

@@ -15,7 +15,7 @@ pub trait BoardRepository {
     async fn get_highest_board_position(&self) -> i32;
     async fn delete(&self, id: i64) -> bool;
     async fn archive(&self, id: i64) -> bool;
-    async fn get_lowest_board_position(&self) -> i32;
+    async fn get_lowest_board_position(&self) -> (i32, i64);
 }
 
 #[async_trait]
@@ -28,5 +28,5 @@ pub trait TaskRepository {
     async fn delete(&self, id: i64) -> bool;
     async fn get_by_board_id(&self, board_id: i64, filter: GetTaskFilter) -> Vec<Box<Task>>;
     async fn archive(&self, id: i64) -> bool;
-    async fn unarchive(&self, id: i64) -> bool;
+    async fn unarchive(&self, id: i64, destination_board_id: i64) -> bool;
 }

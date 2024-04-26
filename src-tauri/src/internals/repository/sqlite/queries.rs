@@ -14,7 +14,7 @@ pub const ARCHIVE_BOARD_BY_BOARD_ID: &str =
 pub const DELETE_BOARD_BY_BOARD_ID: &str =
     "DELETE FROM boards WHERE board_id = ?";
 pub const GET_LOWEST_BOARD_POSITION: &str =
-    "SELECT MIN(position) AS min_position FROM boards WHERE deleted_at IS NULL ORDER BY position ASC LIMIT 1";
+    "SELECT MIN(position) AS min_position, board_id FROM boards WHERE deleted_at IS NULL ORDER BY position ASC LIMIT 1";
 
 // Tasks
 pub const INSERT_TASK_QUERY: &str = 
@@ -38,4 +38,4 @@ pub const DELETE_TASK_BY_TASK_ID: &str =
 pub const DELETE_TASK_BY_BOARD_ID: &str =
     "DELETE FROM tasks WHERE board_id = ?";
 pub const UNARCHIVE_TASK_BY_TASK_ID: &str =
-    "UPDATE tasks SET deleted_at = NULL WHERE task_id = ?";
+    "UPDATE tasks SET board_id = ?, deleted_at = NULL WHERE task_id = ?";
